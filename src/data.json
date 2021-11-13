@@ -1,0 +1,295 @@
+{
+    "levels": [
+        {
+            "city": {
+                "name": "Ouro Preto",
+                "state": "MG"
+            },
+            "history": [
+                "Ciclo do Ouro"
+            ],
+            "coordinates": {
+                "lat": -20.3864301,
+                "lng": -43.5027689
+            }
+        },
+        {
+            "city": {
+                "name": "São João del-Rei",
+                "state": "MG"
+            },
+            "history": [
+                "Guerra dos Emboabas"
+            ],
+            "coordinates": {
+                "lat": -21.1346173,
+                "lng": -44.2588544
+            }
+        },
+        {
+            "city": {
+                "name": "Diamantina",
+                "state": "MG"
+            },
+            "history": [
+                "Descoberta dos Diamantes em 1729"
+            ],
+            "coordinates": {
+                "lat": -18.2415828,
+                "lng": -43.601634
+            }
+        },
+        {
+            "city": {
+                "name": "Tiradentes",
+                "state": "MG"
+            },
+            "history": [
+                "Foi nomeada por causa de Joaquim José da Silva Xavier, o mártir (sacrificado por um ideal ou por uma crença) da Independência do Brasil"
+            ],
+            "coordinates": {
+                "lat": -21.1102693,
+                "lng": -44.17348
+            }
+        },
+        {
+            "city": {
+                "name": "Mariana",
+                "state": "MG"
+            },
+            "history": [
+                "Foi a primeira vila, cidade e capital do estado de Minas Gerais"
+            ],
+            "coordinates": {
+                "lat": -21.1390378,
+                "lng": -44.2603551
+            }
+        },
+        {
+            "city": {
+                "name": "Petrópolis",
+                "state": "RJ"
+            },
+            "history": [
+                "Também conhecida como Cidade Imperial por ser um centro urbano durante o Império do Brasil",
+                "Cidade mais segura do estado do Rio de Janeiro e a sexta cidade mais segura do Brasil, segundo classificação do IPEA (Instituto de Pesquisa Econômica Aplicada) para cidades de médio e grande portes"
+            ],
+            "coordinates": {
+                "lat": -22.5254416,
+                "lng": -43.2115826
+            }
+        },
+        {
+            "city": {
+                "name": "Paraty",
+                "state": "RJ"
+            },
+            "history": [
+                "Era habitada por indígenas guaianás",
+                "Nome tem o significado \"rio dos paratis\" na etimologia Tupi Antiga, uma espécie de peixe"
+            ],
+            "coordinates": {
+                "lat": -23.2208196,
+                "lng": -44.7122801
+            }
+        },
+        {
+            "city": {
+                "name": "Paraty",
+                "state": "RJ"
+            },
+            "history": [
+                "Era habitada por indígenas guaianás",
+                "Nome tem o significado \"rio dos paratis\" na etimologia Tupi Antiga, uma espécie de peixe"
+            ],
+            "coordinates": {
+                "lat": -23.2208196,
+                "lng": -44.7122801
+            }
+        },
+        {
+            "city": {
+                "name": "Olinda",
+                "state": "PE"
+            },
+            "history": [
+                "Fundada (ainda como um povoado) em 1535, uma das mais antigas cidades brasileiras",
+                "Sede do primeiro engenho de açúcar"
+            ],
+            "coordinates": {
+                "lat": -8.0140427,
+                "lng": -34.8476446
+            }
+        },
+        {
+            "city": {
+                "name": "Salvador",
+                "state": "BA"
+            },
+            "history": [
+                "Primeira capital do Brasil, no século XVI",
+                "Não se tratava de um povoado que foi crescendo. A cidade já surge estruturada."
+            ],
+            "coordinates": {
+                "lat": -12.9735869,
+                "lng": -38.5097254
+            }
+        },
+        {
+            "city": {
+                "name": "Rio de Contas",
+                "state": "BA"
+            },
+            "history": [
+                "Foi a primeira cidade planejada do Brasil",
+                "Povoado conhecido como \"Pouso dos Crioulos\" (atual sede desta cidade) foi fundado por escravos alforriados e fugidos em algum momento do século XVII."
+            ],
+            "coordinates": {
+                "lat": -13.5809189,
+                "lng": -41.8134299
+            }
+        },
+        {
+            "city": {
+                "name": "Porto Seguro",
+                "state": "BA"
+            },
+            "history": [
+                "Localiza-se na região que foi, oficialmente, a primeira a que chegaram os navegadores portugueses no atual território brasileiro."
+            ],
+            "coordinates": {
+                "lat": -16.4387683,
+                "lng": -39.064427
+            }
+        },
+        {
+            "city": {
+                "name": "São Cristóvao",
+                "state": "SE"
+            },
+            "history": [
+                "A quarta cidade mais antiga do país e foi a primeira capital de Sergipe.",
+                "Em 1634 foi invadida pelos neerlandeses, e posteriormente destruída por tropas luso-espanholas (que habitavam a cidade) e os neerlandeses"
+            ],
+            "coordinates": {
+                "lat": -11.013789,
+                "lng": -37.2056048
+            }
+        },
+        {
+            "city": {
+                "name": "Laranjeiras",
+                "state": "SE"
+            },
+            "history": [
+                "Depois que as tropas de Cristóvão de Barros arrasaram com as nações indígenas, por volta de 1590, muitos ‘colonos’ acabaram se fixando às margens do rio Cotinguiba, rio que banha esta cidade. Logo foi construído um pequeno porto",
+                "Por conta da cana-de-açúcar, do coco, do gado, do comércio e, principalmente do porto, o povoado desta cidade tinha conseguido um nível extraordinário de desenvolvimento.",
+                "A cidade não possui prédios devido ao tombamento da parte histórica, tem muitas ruas construídas com pedra-sabão e algumas são muito estreitas.",
+                "Um dos mais importantes centros de comercialização de escravos do país – uma história triste contada no Museu Afro-Brasileiro"
+            ],
+            "coordinates": {
+                "lat": -10.8069239,
+                "lng": -37.1688358
+            }
+        },
+        {
+            "city": {
+                "name": "São Luís",
+                "state": "MA"
+            },
+            "history": [
+                "Na década de 1550, foi fundada a cidade de Nazaré, provavelmente onde hoje é esta cidade, que acabou, no entanto, sendo abandonada devido à resistência dos índios e à dificuldade de acesso à ilha",
+                "Na segunda metade do século XVIII, o porto desta cidade ganha enorme movimento de chegada e saída de produtos, com a Companhia Geral de Comércio do Grão-Pará e Maranhão"
+            ],
+            "coordinates": {
+                "lat": -2.4884244,
+                "lng": -44.2929656
+            }
+        },
+        {
+            "city": {
+                "name": "Alcântara",
+                "state": "MA"
+            },
+            "history": [
+                "Por volta do século 18, a região viveu seus tempos de glória graças à plantação e ao comércio de cana-de-açúcar e algodão",
+                "Há um centro espacial do qual são lançados os veículos lançadores de satélites no âmbito da Missão espacial completa brasileira. É o CLA - Centro de Lançamento de ..."
+            ],
+            "coordinates": {
+                "lat": -2.408739,
+                "lng": -44.417713
+            }
+        },
+        {
+            "city": {
+                "name": "Lapa",
+                "state": "PR"
+            },
+            "history": [
+                "A exploração da erva-mate e a atividade tropeira fizeram parte das atividades econômicas de sua história",
+                "Durante a Revolução Federalista em 1894, tornou-se arena de um sangrento confronto entre as tropas republicanas, os chamados Pica-paus e os Maragatos contrários a república."
+            ],
+            "coordinates": {
+                "lat": -25.7678428,
+                "lng": -49.7165502
+            }
+        },
+        {
+            "city": {
+                "name": "São Francisco do Sul",
+                "state": "SC"
+            },
+            "history": [
+                "A cidade mais antiga de Santa Catarina e a terceira cidade mais antiga do Brasil",
+                "Ocupação foi feita inicialmente por espanhóis, em 1553"
+            ],
+            "coordinates": {
+                "lat": -26.1824831,
+                "lng": -48.4856285
+            }
+        },
+        {
+            "city": {
+                "name": "Antônio Prado",
+                "state": "RS"
+            },
+            "history": [
+                "A Serra Gaúcha já era habitada por índios caigangues desde tempos imemoriais, mas estes foram desalojados violentamente pelos chamados \"bugreiros\", dentro de uma política oficial do governo brasileiro de \"embranquecimento\" da população brasileira."
+            ],
+            "coordinates": {
+                "lat": -21.2895404,
+                "lng": -50.340384
+            }
+        },
+        {
+            "city": {
+                "name": "Pirenópolis",
+                "state": "GO"
+            },
+            "history": [
+                "Um dos primeiros do estado de Goiás. Foi fundado com o nome de Minas de Nossa Senhora do Rosário Meia Ponte",
+                "Ainda no século XIX, com o nome de cidade de Meia Ponte, destacou-se como o berço da música goiana, e como berço da imprensa em Goiás, já que ali nasceu o primeiro jornal do Centro Oeste, denominado Matutina Meiapontense.",
+                "Em 1890, a cidade teve seu nome mudado para o nome atual, que significa \"o município dos Pireneus\", nome dado à serra que a circunda."
+            ],
+            "coordinates": {
+                "lat": -22.1081236,
+                "lng": -50.1723632
+            }
+        },
+        {
+            "city": {
+                "name": "Cidade de Goiás",
+                "state": "GO"
+            },
+            "history": [
+                "Antiga capital do estado homônimo de Goiás.",
+                "Antes da chegada dos europeus ao continente americano, a porção central do Brasil era ocupada por indígenas do tronco linguístico macro-jê, como os acroás, os xacriabás, os xavantes, os caiapós, os javaés etc.",
+                "Com o esgotamento do ouro, em fins do século XVIII, teve sua população reduzida e precisou reorientar suas atividades econômicas para a agropecuária."
+            ],
+            "coordinates": {
+                "lat": -22.1081236,
+                "lng": -50.1723632
+            }
+        }
+    ]
+}
