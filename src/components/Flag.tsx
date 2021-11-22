@@ -1,6 +1,8 @@
+import React from 'react';
+
 interface FlagProps {
-  name: string
-  code: string
+  name: string;
+  code: string;
 }
 
 export default function Flag({ name, code }: FlagProps) {
@@ -9,6 +11,7 @@ export default function Flag({ name, code }: FlagProps) {
       alt={name}
       height={20}
       width={30}
-      src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${code}.svg`}/>
-  )
+      src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${code}.svg`}
+    />
+  );
 }

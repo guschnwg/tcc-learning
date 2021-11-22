@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter } from "react-router-dom";
+import { HashRouter } from 'react-router-dom';
 import ReactModal from 'react-modal';
 
 import countries from 'i18n-iso-countries';
-import brCountries from "i18n-iso-countries/langs/pt.json"
+import brCountries from 'i18n-iso-countries/langs/pt.json';
 
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';

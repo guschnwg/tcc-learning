@@ -1,20 +1,20 @@
 import { useJsApiLoader } from '@react-google-maps/api';
 import React from 'react';
 
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link } from 'react-router-dom';
 import Game from './Game';
 
 import Map from './Map';
 import StreetView from './StreetView';
 
-const COORDINATES = { lat: -20.3864301, lng: -43.5027689 }
+const COORDINATES = { lat: -20.3864301, lng: -43.5027689 };
 
 function App() {
   const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY!,
-  })
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '',
+  });
 
-  if (!isLoaded) {
+  if (!isLoaded || loadError) {
     return null;
   }
 
