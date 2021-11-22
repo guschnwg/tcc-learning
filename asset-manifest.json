@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/tcc-learning/static/css/main.3fdd3e35.chunk.css",
-    "main.js": "/tcc-learning/static/js/main.5928df04.chunk.js",
-    "main.js.map": "/tcc-learning/static/js/main.5928df04.chunk.js.map",
+    "main.js": "/tcc-learning/static/js/main.fd3a91c8.chunk.js",
+    "main.js.map": "/tcc-learning/static/js/main.fd3a91c8.chunk.js.map",
     "runtime-main.js": "/tcc-learning/static/js/runtime-main.3f4c16fa.js",
     "runtime-main.js.map": "/tcc-learning/static/js/runtime-main.3f4c16fa.js.map",
     "static/js/2.f16573b5.chunk.js": "/tcc-learning/static/js/2.f16573b5.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.3f4c16fa.js",
     "static/js/2.f16573b5.chunk.js",
     "static/css/main.3fdd3e35.chunk.css",
-    "static/js/main.5928df04.chunk.js"
+    "static/js/main.fd3a91c8.chunk.js"
   ]
 }
