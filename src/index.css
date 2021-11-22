@@ -11,3 +11,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.App {
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.full {
+  height: 100%;
+  width: 100%;
+}
+
+.game-container {
+  position: relative;
+}
+
+.country-flag {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10000;
+}
+
+.ReactModal__Overlay {
+  z-index: 9999999;
+}

@@ -3,7 +3,8 @@
         {
             "city": {
                 "name": "Ouro Preto",
-                "state": "MG"
+                "state": "MG",
+                "country": "BR"
             },
             "history": [
                 "Ciclo do Ouro"
@@ -16,7 +17,8 @@
         {
             "city": {
                 "name": "São João del-Rei",
-                "state": "MG"
+                "state": "MG",
+                "country": "BR"
             },
             "history": [
                 "Guerra dos Emboabas"
@@ -29,7 +31,8 @@
         {
             "city": {
                 "name": "Diamantina",
-                "state": "MG"
+                "state": "MG",
+                "country": "BR"
             },
             "history": [
                 "Descoberta dos Diamantes em 1729"
@@ -42,7 +45,8 @@
         {
             "city": {
                 "name": "Tiradentes",
-                "state": "MG"
+                "state": "MG",
+                "country": "BR"
             },
             "history": [
                 "Foi nomeada por causa de Joaquim José da Silva Xavier, o mártir (sacrificado por um ideal ou por uma crença) da Independência do Brasil"
@@ -55,7 +59,8 @@
         {
             "city": {
                 "name": "Mariana",
-                "state": "MG"
+                "state": "MG",
+                "country": "BR"
             },
             "history": [
                 "Foi a primeira vila, cidade e capital do estado de Minas Gerais"
@@ -68,7 +73,8 @@
         {
             "city": {
                 "name": "Petrópolis",
-                "state": "RJ"
+                "state": "RJ",
+                "country": "BR"
             },
             "history": [
                 "Também conhecida como Cidade Imperial por ser um centro urbano durante o Império do Brasil",
@@ -82,7 +88,8 @@
         {
             "city": {
                 "name": "Paraty",
-                "state": "RJ"
+                "state": "RJ",
+                "country": "BR"
             },
             "history": [
                 "Era habitada por indígenas guaianás",
@@ -96,7 +103,8 @@
         {
             "city": {
                 "name": "Paraty",
-                "state": "RJ"
+                "state": "RJ",
+                "country": "BR"
             },
             "history": [
                 "Era habitada por indígenas guaianás",
@@ -110,7 +118,8 @@
         {
             "city": {
                 "name": "Olinda",
-                "state": "PE"
+                "state": "PE",
+                "country": "BR"
             },
             "history": [
                 "Fundada (ainda como um povoado) em 1535, uma das mais antigas cidades brasileiras",
@@ -124,7 +133,8 @@
         {
             "city": {
                 "name": "Salvador",
-                "state": "BA"
+                "state": "BA",
+                "country": "BR"
             },
             "history": [
                 "Primeira capital do Brasil, no século XVI",
@@ -138,7 +148,8 @@
         {
             "city": {
                 "name": "Rio de Contas",
-                "state": "BA"
+                "state": "BA",
+                "country": "BR"
             },
             "history": [
                 "Foi a primeira cidade planejada do Brasil",
@@ -152,7 +163,8 @@
         {
             "city": {
                 "name": "Porto Seguro",
-                "state": "BA"
+                "state": "BA",
+                "country": "BR"
             },
             "history": [
                 "Localiza-se na região que foi, oficialmente, a primeira a que chegaram os navegadores portugueses no atual território brasileiro."
@@ -165,7 +177,8 @@
         {
             "city": {
                 "name": "São Cristóvao",
-                "state": "SE"
+                "state": "SE",
+                "country": "BR"
             },
             "history": [
                 "A quarta cidade mais antiga do país e foi a primeira capital de Sergipe.",
@@ -179,7 +192,8 @@
         {
             "city": {
                 "name": "Laranjeiras",
-                "state": "SE"
+                "state": "SE",
+                "country": "BR"
             },
             "history": [
                 "Depois que as tropas de Cristóvão de Barros arrasaram com as nações indígenas, por volta de 1590, muitos ‘colonos’ acabaram se fixando às margens do rio Cotinguiba, rio que banha esta cidade. Logo foi construído um pequeno porto",
@@ -195,7 +209,8 @@
         {
             "city": {
                 "name": "São Luís",
-                "state": "MA"
+                "state": "MA",
+                "country": "BR"
             },
             "history": [
                 "Na década de 1550, foi fundada a cidade de Nazaré, provavelmente onde hoje é esta cidade, que acabou, no entanto, sendo abandonada devido à resistência dos índios e à dificuldade de acesso à ilha",
@@ -209,7 +224,8 @@
         {
             "city": {
                 "name": "Alcântara",
-                "state": "MA"
+                "state": "MA",
+                "country": "BR"
             },
             "history": [
                 "Por volta do século 18, a região viveu seus tempos de glória graças à plantação e ao comércio de cana-de-açúcar e algodão",
@@ -223,7 +239,8 @@
         {
             "city": {
                 "name": "Lapa",
-                "state": "PR"
+                "state": "PR",
+                "country": "BR"
             },
             "history": [
                 "A exploração da erva-mate e a atividade tropeira fizeram parte das atividades econômicas de sua história",
@@ -237,7 +254,8 @@
         {
             "city": {
                 "name": "São Francisco do Sul",
-                "state": "SC"
+                "state": "SC",
+                "country": "BR"
             },
             "history": [
                 "A cidade mais antiga de Santa Catarina e a terceira cidade mais antiga do Brasil",
@@ -251,7 +269,8 @@
         {
             "city": {
                 "name": "Antônio Prado",
-                "state": "RS"
+                "state": "RS",
+                "country": "BR"
             },
             "history": [
                 "A Serra Gaúcha já era habitada por índios caigangues desde tempos imemoriais, mas estes foram desalojados violentamente pelos chamados \"bugreiros\", dentro de uma política oficial do governo brasileiro de \"embranquecimento\" da população brasileira."
@@ -264,7 +283,8 @@
         {
             "city": {
                 "name": "Pirenópolis",
-                "state": "GO"
+                "state": "GO",
+                "country": "BR"
             },
             "history": [
                 "Um dos primeiros do estado de Goiás. Foi fundado com o nome de Minas de Nossa Senhora do Rosário Meia Ponte",
@@ -279,7 +299,8 @@
         {
             "city": {
                 "name": "Cidade de Goiás",
-                "state": "GO"
+                "state": "GO",
+                "country": "BR"
             },
             "history": [
                 "Antiga capital do estado homônimo de Goiás.",
