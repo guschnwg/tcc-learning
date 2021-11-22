@@ -1,15 +1,28 @@
 import { useState } from 'react';
-import data from '../data.json';
-import Map from './Map';
-import StreetView from './StreetView';
-import Flag from './Flag';
 import countries from 'i18n-iso-countries';
 import ReactModal from 'react-modal';
+import { useStopwatch, useTimer } from 'react-timer-hook';
+
+import data from '../data.json';
+
+import Flag from './Flag';
+import Map from './Map';
+import StreetView from './StreetView';
 
 
 export default function Game() {
   const [index, setIndex] = useState(0);
   const [modalOpened, setModalOpened] = useState(false);
+  const {
+    seconds,
+    minutes,
+    hours,
+    days,
+    isRunning,
+    start,
+    pause,
+  } = useStopwatch({ autoStart: true });
+
 
   const current = data.levels[index];
 
@@ -27,10 +40,21 @@ export default function Game() {
           />
         </button>
 
-
-        <button onClick={() => setIndex(prev => prev +1)}>
+        <button onClick={() => setIndex(prev => prev + 1)}>
           Next
         </button>
+
+        <div style={{ fontSize: '100px' }}>
+          <span>{seconds + minutes * 60 + hours * 60 * 60 + days * 60 * 60* 24}</span>
+        </div>
+        <p>{isRunning ? 'Running' : 'Not running'}</p>
+        <button onClick={start}>Start</button>
+        <button onClick={pause}>Pause</button>
+        <button onClick={() => {
+          // Restarts to 5 minutes timer
+          const time = new Date();
+          time.setSeconds(time.getSeconds() + 300);
+        }}>Restart</button>
       </div>
 
       <ReactModal
