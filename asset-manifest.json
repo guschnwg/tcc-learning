@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/tcc-learning/static/css/main.f3b918b6.chunk.css",
-    "main.js": "/tcc-learning/static/js/main.3b496497.chunk.js",
-    "main.js.map": "/tcc-learning/static/js/main.3b496497.chunk.js.map",
-    "runtime-main.js": "/tcc-learning/static/js/runtime-main.1cc8631f.js",
-    "runtime-main.js.map": "/tcc-learning/static/js/runtime-main.1cc8631f.js.map",
-    "static/js/2.22d1c42d.chunk.js": "/tcc-learning/static/js/2.22d1c42d.chunk.js",
-    "static/js/2.22d1c42d.chunk.js.map": "/tcc-learning/static/js/2.22d1c42d.chunk.js.map",
-    "static/js/3.aa1e1edb.chunk.js": "/tcc-learning/static/js/3.aa1e1edb.chunk.js",
-    "static/js/3.aa1e1edb.chunk.js.map": "/tcc-learning/static/js/3.aa1e1edb.chunk.js.map",
+    "main.js": "/tcc-learning/static/js/main.feecb108.chunk.js",
+    "main.js.map": "/tcc-learning/static/js/main.feecb108.chunk.js.map",
+    "runtime-main.js": "/tcc-learning/static/js/runtime-main.163c0ee6.js",
+    "runtime-main.js.map": "/tcc-learning/static/js/runtime-main.163c0ee6.js.map",
+    "static/js/2.b6da7dea.chunk.js": "/tcc-learning/static/js/2.b6da7dea.chunk.js",
+    "static/js/2.b6da7dea.chunk.js.map": "/tcc-learning/static/js/2.b6da7dea.chunk.js.map",
+    "static/js/3.fc7e5b25.chunk.js": "/tcc-learning/static/js/3.fc7e5b25.chunk.js",
+    "static/js/3.fc7e5b25.chunk.js.map": "/tcc-learning/static/js/3.fc7e5b25.chunk.js.map",
     "index.html": "/tcc-learning/index.html",
     "static/css/main.f3b918b6.chunk.css.map": "/tcc-learning/static/css/main.f3b918b6.chunk.css.map",
-    "static/js/2.22d1c42d.chunk.js.LICENSE.txt": "/tcc-learning/static/js/2.22d1c42d.chunk.js.LICENSE.txt"
+    "static/js/2.b6da7dea.chunk.js.LICENSE.txt": "/tcc-learning/static/js/2.b6da7dea.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.1cc8631f.js",
-    "static/js/2.22d1c42d.chunk.js",
+    "static/js/runtime-main.163c0ee6.js",
+    "static/js/2.b6da7dea.chunk.js",
     "static/css/main.f3b918b6.chunk.css",
-    "static/js/main.3b496497.chunk.js"
+    "static/js/main.feecb108.chunk.js"
   ]
 }
