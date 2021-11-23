@@ -48,7 +48,7 @@ const Map: React.FC<Props> = ({ coordinates = defaultCoordinates }) => {
         <Marker position={marker} onClick={() => setShowInfoWindow(true)}>
           {showInfoWindow && (
             <InfoWindow onCloseClick={() => setShowInfoWindow(false)}>
-              <React.Suspense fallback={() => <span>Loading...</span>}>
+              <React.Suspense fallback={<span>Loading...</span>}>
                 <Data position={marker} />
               </React.Suspense>
             </InfoWindow>
