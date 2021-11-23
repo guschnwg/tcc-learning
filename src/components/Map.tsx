@@ -1,7 +1,7 @@
 import React from 'react';
 import { GoogleMap } from '@react-google-maps/api';
 
-interface MapProps {
+interface Props {
   coordinates?: { lat: number; lng: number };
 }
 
@@ -10,6 +10,8 @@ const defaultCoordinates = {
   lng: 77.01502627,
 };
 
-export default function Map({ coordinates = defaultCoordinates }: MapProps) {
+const Map: React.FC<Props> = ({ coordinates = defaultCoordinates }) => {
   return <GoogleMap mapContainerStyle={{ height: '100%' }} center={coordinates} zoom={10} />;
 }
+
+export default Map;

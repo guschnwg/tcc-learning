@@ -9,7 +9,7 @@ import Map from './Map';
 import StreetView from './StreetView';
 import Stopwatch from './Stopwatch';
 
-export default function Game() {
+const Game: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [modalOpened, setModalOpened] = useState(false);
 
@@ -44,3 +44,5 @@ export default function Game() {
     </div>
   );
 }
+
+export default Game;

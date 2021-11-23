@@ -1,7 +1,7 @@
 import React from 'react';
 import { useStopwatch } from 'react-timer-hook';
 
-export default function Stopwatch() {
+const Stopwatch: React.FC = () => {
   const { seconds, minutes, hours, days, isRunning, start, pause } = useStopwatch({ autoStart: true });
 
   return (
@@ -24,3 +24,5 @@ export default function Stopwatch() {
     </div>
   );
 }
+
+export default Stopwatch;

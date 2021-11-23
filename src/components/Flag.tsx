@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface FlagProps {
+interface Props {
   name: string;
   code: string;
 }
 
-export default function Flag({ name, code }: FlagProps) {
+const Flag: React.FC<Props> = ({ name, code }) => {
   return (
     <img
       alt={name}
@@ -15,3 +15,5 @@ export default function Flag({ name, code }: FlagProps) {
     />
   );
 }
+
+export default Flag;
