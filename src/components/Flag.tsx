@@ -14,6 +14,6 @@ const Flag: React.FC<Props> = ({ name, code }) => {
       src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${code}.svg`}
     />
   );
-}
+};
 
 export default Flag;

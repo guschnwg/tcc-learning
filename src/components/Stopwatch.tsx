@@ -23,6 +23,6 @@ const Stopwatch: React.FC = () => {
       </button>
     </div>
   );
-}
+};
 
 export default Stopwatch;

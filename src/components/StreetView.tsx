@@ -17,6 +17,7 @@ const StreetView: React.FC<Props> = ({ coordinates = defaultCoordinates }) => {
     pov: { heading: 0, pitch: 0 },
     zoom: 1,
     visible: true,
+    enableCloseButton: false,
   };
 
   return (
@@ -24,6 +25,6 @@ const StreetView: React.FC<Props> = ({ coordinates = defaultCoordinates }) => {
       <StreetViewPanorama options={streetViewPanoramaOptions} />
     </GoogleMap>
   );
-}
+};
 
-export default StreetView
+export default StreetView;

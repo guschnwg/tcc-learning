@@ -14,8 +14,7 @@ import './index.css';
 countries.registerLocale(brCountries);
 
 ReactModal.setAppElement(
-  document.getElementById('modal-container') ||
-  document.body.appendChild(document.createElement('div'))
+  document.getElementById('modal-container') || document.body.appendChild(document.createElement('div'))
 );
 
 ReactDOM.render(
