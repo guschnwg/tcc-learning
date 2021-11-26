@@ -18,6 +18,7 @@ const StreetView: React.FC<Props> = ({ coordinates = defaultCoordinates }) => {
     zoom: 1,
     visible: true,
     enableCloseButton: false,
+    disableDefaultUI: true,
   };
 
   return (

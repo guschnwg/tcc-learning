@@ -20,11 +20,6 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <nav>
-        <Link to="/">Game</Link>
-        <Link to="/street-view">Street View</Link>
-        <Link to="/map">Map</Link>
-      </nav>
       <div className="full">
         <Routes>
           <Route path="/" element={<Game />} />

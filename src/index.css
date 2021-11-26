@@ -1,6 +1,15 @@
+@font-face {
+  font-family: "Nougat";
+  src: url("./Nougat-ExtraBlack.ttf") format("truetype");
+}
+
+* {
+  font-family: 'Nougat';
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+  font-family: 'Nougat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
     'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -8,6 +17,17 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+button {
+  background: #323dbb;
+  border: 5px solid white;
+  color: white;
+  border-radius: 5px;
+  margin: 0 10px;
+  padding: 5px 10px;
+  font-size: 24px;
+  line-height: 24px;
 }
 
 .App {
@@ -35,4 +55,36 @@ code {
 
 .ReactModal__Overlay {
   z-index: 9999999;
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(-15deg);
+  }
+}
+
+.shaking {
+  animation: shake 1s linear infinite;
+}
+
+.stopwatch {
+  display: inline-flex;
+  align-items: center;
+  background: white;
+  border: 5px solid #323dbb;
+  color: #323dbb;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.stopwatch > .clock {
+  margin-right: 10px;
 }
