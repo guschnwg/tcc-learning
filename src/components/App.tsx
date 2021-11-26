@@ -1,7 +1,7 @@
 import { useJsApiLoader } from '@react-google-maps/api';
 import React from 'react';
 
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Game from './Game';
 
 import Map from './Map';

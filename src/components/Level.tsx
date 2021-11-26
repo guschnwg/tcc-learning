@@ -22,10 +22,7 @@ const Data = ({ position }: { position: google.maps.LatLngLiteral }) => {
     <div>
       <span>{data.display_name}</span>
 
-      <Flag
-        name={data.address.country}
-        code={((data.address.country_code as string) || '').toUpperCase()}
-      />
+      <Flag name={data.address.country} code={((data.address.country_code as string) || '').toUpperCase()} />
     </div>
   );
 };
@@ -35,27 +32,18 @@ const PlaceChooser = ({ show, onHide, onConfirm }: any) => {
   const [showInfoWindow, setShowInfoWindow] = useState(false);
 
   return (
-    <Modal
-      show={show}
-      onHide={onHide}
-    >
+    <Modal show={show} onHide={onHide}>
       <div className="full">
         <div className="full">
           <Map
-            onMapClick={
-              (e) => {
-                if (e.latLng) {
-                  setMarker(e.latLng.toJSON());
-                }
+            onMapClick={(e) => {
+              if (e.latLng) {
+                setMarker(e.latLng.toJSON());
               }
-            }
+            }}
           >
             {marker && (
-              <Marker
-                position={marker}
-                onClick={() => setShowInfoWindow(true)}
-                onLoad={() => setShowInfoWindow(true)}
-              >
+              <Marker position={marker} onClick={() => setShowInfoWindow(true)} onLoad={() => setShowInfoWindow(true)}>
                 {showInfoWindow && (
                   <InfoWindow onCloseClick={() => setShowInfoWindow(false)}>
                     <React.Suspense fallback={<span>Loading...</span>}>
@@ -71,43 +59,38 @@ const PlaceChooser = ({ show, onHide, onConfirm }: any) => {
         </div>
       </div>
     </Modal>
-  )
-}
+  );
+};
 
 const Tips = ({ tips, show, onHide, onTipView }: any) => {
-  const [visible, setVisible] = useState<string[]>([])
+  const [visible, setVisible] = useState<string[]>([]);
 
   useEffect(() => {
     if (onTipView) {
       onTipView(visible);
     }
-  }, [visible, onTipView])
+  }, [visible, onTipView]);
 
   return (
-    <Modal
-      show={show}
-      onHide={onHide}
-    >
+    <Modal show={show} onHide={onHide}>
       <div className="full">
         <ul>
           {tips.map((sentence: string) => {
             if (visible.includes(sentence)) {
-              return (
-                <li key={sentence}>{sentence}</li>
-              )
+              return <li key={sentence}>{sentence}</li>;
             }
             return (
               <li key={sentence}>
                 Escondido
-                <button onClick={() => setVisible(prev => [...prev, sentence])}>Mostrar</button>
+                <button onClick={() => setVisible((prev) => [...prev, sentence])}>Mostrar</button>
               </li>
-            )
+            );
           })}
         </ul>
       </div>
     </Modal>
-  )
-}
+  );
+};
 
 interface Props {
   current: typeof data.levels[number];
@@ -124,13 +107,9 @@ const Level: React.FC<Props> = ({ current, onNext }) => {
       <StreetView coordinates={current.coordinates} />
 
       <div className="country-flag">
-        <button onClick={() => setMapModalOpened((prev) => !prev)}>
-          Palpitar
-        </button>
+        <button onClick={() => setMapModalOpened((prev) => !prev)}>Palpitar</button>
 
-        <button onClick={onNext}>
-          Pular
-        </button>
+        <button onClick={onNext}>Pular</button>
 
         <button onClick={() => setTipsModalOpened((prev) => !prev)}>
           Dicas {tipsViewed.length}/{current.history.length}
@@ -143,7 +122,7 @@ const Level: React.FC<Props> = ({ current, onNext }) => {
         show={mapModalOpened}
         onHide={() => setMapModalOpened(false)}
         onConfirm={() => {
-          setMapModalOpened(false)
+          setMapModalOpened(false);
           onNext();
         }}
       />

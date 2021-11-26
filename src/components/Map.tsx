@@ -4,7 +4,7 @@ import { GoogleMap } from '@react-google-maps/api';
 interface Props {
   coordinates?: { lat: number; lng: number };
   zoom?: number;
-  onMapClick?: ((e: google.maps.MapMouseEvent) => void) | undefined
+  onMapClick?: ((e: google.maps.MapMouseEvent) => void) | undefined;
 }
 
 const defaultCoordinates = {
@@ -15,12 +15,7 @@ const defaultZoom = 4.5;
 
 const Map: React.FC<Props> = ({ coordinates = defaultCoordinates, zoom = defaultZoom, children, onMapClick }) => {
   return (
-    <GoogleMap
-      mapContainerStyle={{ height: '100%' }}
-      center={coordinates}
-      zoom={zoom}
-      onClick={onMapClick}
-    >
+    <GoogleMap mapContainerStyle={{ height: '100%' }} center={coordinates} zoom={zoom} onClick={onMapClick}>
       {children}
     </GoogleMap>
   );
