@@ -24,7 +24,7 @@ const Game: React.FC = () => {
         levels={data.levels}
         userData={userData}
         current={index}
-        onLevelClick={setIndex}
+        onLevelClick={setIndex} 
       />
     </div>
   );
