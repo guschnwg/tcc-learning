@@ -1,6 +1,7 @@
 {
   "levels": [
     {
+      "id": 1,
       "city": {
         "name": "Ouro Preto",
         "state": "MG",
@@ -13,6 +14,7 @@
       }
     },
     {
+      "id": 2,
       "city": {
         "name": "São João del-Rei",
         "state": "MG",
@@ -25,6 +27,7 @@
       }
     },
     {
+      "id": 3,
       "city": {
         "name": "Diamantina",
         "state": "MG",
@@ -37,6 +40,7 @@
       }
     },
     {
+      "id": 4,
       "city": {
         "name": "Tiradentes",
         "state": "MG",
@@ -51,6 +55,7 @@
       }
     },
     {
+      "id": 5,
       "city": {
         "name": "Mariana",
         "state": "MG",
@@ -63,6 +68,7 @@
       }
     },
     {
+      "id": 6,
       "city": {
         "name": "Petrópolis",
         "state": "RJ",
@@ -78,6 +84,7 @@
       }
     },
     {
+      "id": 7,
       "city": {
         "name": "Paraty",
         "state": "RJ",
@@ -93,6 +100,7 @@
       }
     },
     {
+      "id": 8,
       "city": {
         "name": "Paraty",
         "state": "RJ",
@@ -108,6 +116,7 @@
       }
     },
     {
+      "id": 9,
       "city": {
         "name": "Olinda",
         "state": "PE",
@@ -123,6 +132,7 @@
       }
     },
     {
+      "id": 10,
       "city": {
         "name": "Salvador",
         "state": "BA",
@@ -138,6 +148,7 @@
       }
     },
     {
+      "id": 11,
       "city": {
         "name": "Rio de Contas",
         "state": "BA",
@@ -153,6 +164,7 @@
       }
     },
     {
+      "id": 12,
       "city": {
         "name": "Porto Seguro",
         "state": "BA",
@@ -167,6 +179,7 @@
       }
     },
     {
+      "id": 13,
       "city": {
         "name": "São Cristóvao",
         "state": "SE",
@@ -182,6 +195,7 @@
       }
     },
     {
+      "id": 14,
       "city": {
         "name": "Laranjeiras",
         "state": "SE",
@@ -199,6 +213,7 @@
       }
     },
     {
+      "id": 15,
       "city": {
         "name": "São Luís",
         "state": "MA",
@@ -214,6 +229,7 @@
       }
     },
     {
+      "id": 16,
       "city": {
         "name": "Alcântara",
         "state": "MA",
@@ -229,6 +245,7 @@
       }
     },
     {
+      "id": 17,
       "city": {
         "name": "Lapa",
         "state": "PR",
@@ -244,6 +261,7 @@
       }
     },
     {
+      "id": 18,
       "city": {
         "name": "São Francisco do Sul",
         "state": "SC",
@@ -259,6 +277,7 @@
       }
     },
     {
+      "id": 19,
       "city": {
         "name": "Antônio Prado",
         "state": "RS",
@@ -273,6 +292,7 @@
       }
     },
     {
+      "id": 20,
       "city": {
         "name": "Pirenópolis",
         "state": "GO",
@@ -289,6 +309,7 @@
       }
     },
     {
+      "id": 21,
       "city": {
         "name": "Cidade de Goiás",
         "state": "GO",
