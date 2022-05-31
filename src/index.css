@@ -128,16 +128,42 @@ button:active {
   margin-left: 5px;
 }
 
+.level-number {
+  font-size: 28px;
+}
+.level-number.never-tried {
+  font-size: 56px;
+}
+
 .data-container {
   color: #323dbb;
+  font-weight: 300;
+  font-size: 13px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
 }
-.data-container > ul {
-  padding-inline-start: 20px;
-  margin-block-start: 0.5em;
-  margin-block-end: 0.5em;
+.data-container + button {
+  margin: 0;
+  width: 100%;
 }
-.data-container > ul > li > img {
+.data-container.best-guess {
+  color: white;
+}
+.data-container > span {
+  height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+.data-container > .country > img {
   height: 10px;
+  width: 15px;
+  display: inline;
+  margin-left: 10px;
 }
 
 .spinner {
@@ -174,10 +200,10 @@ button:active {
 }
 
 .gm-style-iw-d {
-  padding: 10px;
-}    
+  overflow: hidden !important;
+}
 .gm-style-iw-c {
-  padding: 20px;
+  padding: 10px !important;
 }
 
 .path-container {
@@ -211,10 +237,14 @@ button:active {
 }
 .path-content-level {
   display: inline-flex !important;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
   margin: 0;
+}
+.path-content-level.current {
+  background: #232b82;
 }
 
 .path-content {

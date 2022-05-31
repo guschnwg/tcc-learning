@@ -1,40 +1,49 @@
 import { InfoWindow, Marker } from '@react-google-maps/api';
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
-import data from '../data.json';
+import _data from '../data.json';
+import _userData from '../user-data.json';
 import Button from './Button';
 
 import Flag from './Flag';
 import Map from './Map';
 import Modal from './Modal';
+import OpenStreetMapsData from './OpenStreetMapData';
 import Spinner from './Spinner';
 import Stopwatch from './Stopwatch';
 import StreetView from './StreetView';
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-const Data = ({ position }: { position: google.maps.LatLngLiteral }) => {
+const haversineDistance = (mk1: google.maps.LatLngLiteral, mk2: google.maps.LatLngLiteral) => {
+  const R = 3958.8; // Radius of the Earth in miles
+  const rlat1 = mk1.lat * (Math.PI / 180); // Convert degrees to radians
+  const rlat2 = mk2.lat * (Math.PI / 180); // Convert degrees to radians
+  const difflat = rlat2 - rlat1; // Radian difference (latitudes)
+  const difflon = (mk2.lng - mk1.lng) * (Math.PI / 180); // Radian difference (longitudes)
+
+  const d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
+  return d;
+}
+
+const Data = ({ position, onConfirm }: { position: google.maps.LatLngLiteral, onConfirm: (data: OSMData) => void }) => {
   const { data } = useSWR(
     `https://nominatim.openstreetmap.org/reverse.php?lat=${position.lat}&lon=${position.lng}&zoom=18&format=jsonv2`,
     fetcher,
     { suspense: true }
   );
 
-  console.log(data);
+  if (data.error || !data.address) {
+    return <span className='data-container'>Not able to get data, try again.</span>;
+  }
 
   return (
-    <div className="data-container">
-      <ul>
-        <li>Cidade: {data.address.town}</li>
-        <li>Estado: {data.address.state}</li>
-        <li>Região: {data.address.region || ":("}</li>
-        <li>
-          País: {data.address.country}
-          <Flag name={data.address.country} code={((data.address.country_code as string) || '').toUpperCase()} />
-        </li>
-      </ul>
-    </div>
-  );
+    <>
+      <OpenStreetMapsData data={data} />
+
+      <Button onClick={() => onConfirm(data)}>Confirmar</Button>
+    </>
+  )
 };
 
 const PlaceChooser = ({ marker, onMapClick, onConfirm }: any) => {
@@ -47,13 +56,16 @@ const PlaceChooser = ({ marker, onMapClick, onConfirm }: any) => {
           onMapClick={onMapClick}
         >
           {marker && (
-            <Marker position={marker} onClick={() => setShowInfoWindow(true)} onLoad={() => setShowInfoWindow(true)}>
+            <Marker
+              position={marker}
+              onClick={() => setShowInfoWindow(true)}
+              onPositionChanged={() => setShowInfoWindow(true)}
+              onLoad={() => setShowInfoWindow(true)}
+            >
               {showInfoWindow && (
                 <InfoWindow onCloseClick={() => setShowInfoWindow(false)}>
                   <React.Suspense fallback={<Spinner color="#323dbb" />}>
-                    <Data position={marker} />
-
-                    <Button onClick={onConfirm}>Confirmar</Button>
+                    <Data position={marker} onConfirm={onConfirm} />
                   </React.Suspense>
                 </InfoWindow>
               )}
@@ -65,9 +77,9 @@ const PlaceChooser = ({ marker, onMapClick, onConfirm }: any) => {
   )
 }
 
-const PlaceChooserModal = ({ show, onHide, onConfirm }: any) => {
+const PlaceChooserModal = ({ show, onHide, onConfirm }: PlaceChooserModalProps) => {
   const [marker, setMarker] = useState<google.maps.LatLngLiteral>();
-  
+
   return (
     <Modal show={show} onHide={onHide}>
       <PlaceChooser
@@ -77,25 +89,36 @@ const PlaceChooserModal = ({ show, onHide, onConfirm }: any) => {
             setMarker(e.latLng.toJSON());
           }
         }}
-        onConfirm={onConfirm}
+        onConfirm={(data: OSMData) => {
+          if (marker) {
+            onConfirm(marker, data);
+          }
+        }}
       />
     </Modal>
   );
 };
 
-const Tips = ({ tips, tipsViewed, show, onHide, onTipView }: any) => {
+interface HintsProps {
+  hints: typeof _data.levels[number]["hints"]
+  hintsViewed: typeof _userData[number]["hints"]
+  show: boolean
+  onHide: () => void
+  onTipView: (index: number) => void
+}
+
+const Hints = ({ hints, hintsViewed, show, onHide, onTipView }: HintsProps) => {
   return (
     <Modal show={show} onHide={onHide}>
       <div className="full">
         <ul>
-          {tips.map((tip: string) => {
-            if (tipsViewed.includes(tip)) {
-              return <li key={tip}>{tip}</li>;
+          {hints.map((hint) => {
+            if (hintsViewed.find(h => h.id === hint.id)) {
+              return <li key={hint.id}>{hint.description}</li>;
             }
             return (
-              <li key={tip}>
-                Escondido
-                <Button onClick={() => onTipView(tip)}>Mostrar</Button>
+              <li key={hint.id}>
+                <Button onClick={() => onTipView(hint.id)}>Mostrar</Button>
               </li>
             );
           })}
@@ -106,24 +129,31 @@ const Tips = ({ tips, tipsViewed, show, onHide, onTipView }: any) => {
 };
 
 interface Props {
-  current: typeof data.levels[number];
-  onNext: (points: number) => void;
+  current: typeof _data.levels[number];
+  userData: typeof _userData[number];
+  onNext: () => void
+  onGuess: (data: any, time: number, distance: number) => void;
+  onHintViewed: (index: number, time: number) => void;
 }
 
-const Level: React.FC<Props> = ({ current, onNext }) => {
+const Level: React.FC<Props> = ({ current, userData, onNext, onGuess, onHintViewed }) => {
   const [mapModalOpened, setMapModalOpened] = useState(false);
-  const [tipsModalOpened, setTipsModalOpened] = useState(false);
-  const [tipsViewed, setTipsViewed] = useState<string[]>([]);
+  const [hintsModalOpened, setHintsModalOpened] = useState(false);
   const time = useRef(0); // Not ideal, but :(
-  const extraPoints = tipsViewed.length * 100;
+
+  const hintsViewed = useMemo(
+    () => userData.hints.filter(h => h.viewed),
+    [userData.hints.length]
+  );
+  const extraPoints = hintsViewed.length * 100;
 
   return (
     <div className="game-container full">
       <div className="game-header">
         <div>
           <Button onClick={() => setMapModalOpened((prev) => !prev)}>Palpitar</Button>
-          <Button onClick={() => setTipsModalOpened((prev) => !prev)}>
-            Dicas {tipsViewed.length}/{current.history.length}
+          <Button onClick={() => setHintsModalOpened((prev) => !prev)}>
+            Dicas {hintsViewed.length}/{current.hints.length}
           </Button>
         </div>
 
@@ -138,12 +168,7 @@ const Level: React.FC<Props> = ({ current, onNext }) => {
         </div>
 
         <div>
-          <Button
-            onClick={() => {
-              setTipsViewed([]);
-              onNext(time.current + extraPoints);
-            }}
-          >Pular</Button>
+          <Button onClick={onNext}>Pular</Button>
         </div>
       </div>
 
@@ -154,18 +179,17 @@ const Level: React.FC<Props> = ({ current, onNext }) => {
       <PlaceChooserModal
         show={mapModalOpened}
         onHide={() => setMapModalOpened(false)}
-        onConfirm={() => {
-          setMapModalOpened(false);
-          onNext(time.current + extraPoints);
+        onConfirm={(location, data) => {
+          onGuess(data, time.current, haversineDistance(location, current.coordinates));
         }}
       />
 
-      <Tips
-        tips={current.history}
-        tipsViewed={tipsViewed}
-        show={tipsModalOpened}
-        onHide={() => setTipsModalOpened(false)}
-        onTipView={(tip: string) => setTipsViewed(prev => [...prev, tip])}
+      <Hints
+        hints={current.hints}
+        hintsViewed={hintsViewed}
+        show={hintsModalOpened}
+        onHide={() => setHintsModalOpened(false)}
+        onTipView={(index: number) => onHintViewed(index, time.current)}
       />
     </div>
   );
