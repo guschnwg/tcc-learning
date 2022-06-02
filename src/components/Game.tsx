@@ -5,6 +5,7 @@ import game from '../data.json';
 
 import Level from './Level';
 import Path from './Path';
+import Button from './Button';
 
 const supabase = createClient('https://ddzlknjoifzrxzclbzop.supabase.co', process.env.REACT_APP_SUPABASE_KEY || '');
 
@@ -44,7 +45,7 @@ const Game: React.FC = () => {
 
   if (!data) {
     return (
-      <div>
+      <div className="login-container">
         {error && (
           <div>
             <pre>
@@ -59,7 +60,7 @@ const Game: React.FC = () => {
             <input name="user" id="user" defaultValue={window.localStorage.getItem("user") || ""} />
           </div>
           <div>
-            <button>Confirm</button>
+            <Button>Entrar</Button>
           </div>
         </form>
       </div>

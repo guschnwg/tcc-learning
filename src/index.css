@@ -275,3 +275,33 @@ button:active {
 .slick-next {
   right: -35px;
 }
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background: #323dbb;
+}
+.login-container > form > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.login-container > form > div > label {
+  color: white;
+  margin-bottom: 5px;
+}
+.login-container > form > div > input {
+  font-size: 38px;
+  padding: 10px;
+  color: #232b82;
+  border-radius: 5px;
+  border: #232b82 5px solid;
+  margin-bottom: 15px;
+}
+.login-container > form > div > button {
+  margin: 0;
+  width: 100%;
+}
