@@ -5,6 +5,20 @@ declare global {
     onConfirm: (location: google.maps.LatLngLiteral, data: OSMData) => void
   }
 
+  interface OpenStreetMapDataProps {
+    data: OSMData
+    className?: string
+    distance?: number
+  }
+
+  interface PlaceChooserProps {
+    marker?: google.maps.LatLngLiteral
+    onMapClick: (e: google.maps.MapMouseEvent) => void
+    onConfirm: any
+  }
+
+  //
+
   interface OSMAddress {
     town?: string
     city?: string
@@ -39,19 +53,63 @@ declare global {
     boundingbox: string[]
   }
 
-  interface OpenStreetMapDataProps {
+  //
+
+  interface HintView {
+    id: number
+    viewed: boolean
+    timestamp: number
+  }
+
+  interface Guess {
+    id: number
+    distance: number
+    hints_viewed: number
+    timestamp: number
     data: OSMData
-    className?: string
-    distance?: number
+  }
+
+  interface UserLevel {
+    id: number
+    level_id: number
+    completed: boolean
+    hints: HintView[]
+    guesses: Guess[]
   }
 
   interface UserData {
-
+    id: number
+    data: UserLevel[]
   }
 
+  //
+
   interface Data {
-    
+    levels: Level[]
+  }
+
+  export interface Level {
+    id: number
+    city: City
+    hints: Hint[]
+    coordinates: Coordinates
+  }
+
+  export interface City {
+    name: string
+    state: string
+    country: string
+  }
+
+  export interface Hint {
+    id: number
+    description: string
+  }
+
+  export interface Coordinates {
+    lat: number
+    lng: number
   }
 }
 
-export {};
+export { };

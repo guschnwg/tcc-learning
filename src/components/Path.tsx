@@ -1,8 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faChevronDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import React, { useRef, useState } from "react"
-import data from '../data.json';
-import _userData from '../user-data.json';
 import Button from "./Button";
 import "slick-carousel/slick/slick.css";
 import useDimensions from "react-use-dimensions";
@@ -11,8 +9,8 @@ import OpenStreetMapsData from "./OpenStreetMapData";
 
 
 interface Props {
-    levels: typeof data.levels
-    userData: typeof _userData
+    levels: Level[]
+    userData: UserLevel[]
     current: number
     onLevelClick: (index: number) => void
 }
@@ -62,7 +60,7 @@ const Path: React.FC<Props> = ({ levels, userData, current, onLevelClick }) => {
                                     {bestGuess && (
                                         <>
                                             <OpenStreetMapsData
-                                                data={bestGuess.data as any}
+                                                data={bestGuess.data}
                                                 className="best-guess"
                                                 distance={bestGuess.distance}
                                             >

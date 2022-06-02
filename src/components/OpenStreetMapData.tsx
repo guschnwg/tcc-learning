@@ -1,7 +1,7 @@
-import React, { PropsWithChildren } from "react";
+import React from "react";
 import Flag from "./Flag";
 
-export default function OpenStreetMapsData({ data, className = "", distance, children }: PropsWithChildren<OpenStreetMapDataProps>) {
+const OpenStreetMapsData: React.FC<OpenStreetMapDataProps> = ({ data, className = "", distance, children }) => {
   const city = data.address.city || data.address.town || data.address.municipality || data.address.county || data.address.village;
   if (!city) {
     console.log(data);
@@ -26,3 +26,5 @@ export default function OpenStreetMapsData({ data, className = "", distance, chi
     </div>
   );
 }
+
+export default OpenStreetMapsData;

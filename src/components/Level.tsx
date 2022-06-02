@@ -1,11 +1,10 @@
 import { InfoWindow, Marker } from '@react-google-maps/api';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import useSWR from 'swr';
 import _data from '../data.json';
 import _userData from '../user-data.json';
 import Button from './Button';
 
-import Flag from './Flag';
 import Map from './Map';
 import Modal from './Modal';
 import OpenStreetMapsData from './OpenStreetMapData';
@@ -46,7 +45,7 @@ const Data = ({ position, onConfirm }: { position: google.maps.LatLngLiteral, on
   )
 };
 
-const PlaceChooser = ({ marker, onMapClick, onConfirm }: any) => {
+const PlaceChooser: React.FC<PlaceChooserProps> = ({ marker, onMapClick, onConfirm }) => {
   const [showInfoWindow, setShowInfoWindow] = useState(false);
 
   return (
@@ -84,7 +83,7 @@ const PlaceChooserModal = ({ show, onHide, onConfirm }: PlaceChooserModalProps) 
     <Modal show={show} onHide={onHide}>
       <PlaceChooser
         marker={marker}
-        onMapClick={(e: any) => {
+        onMapClick={e => {
           if (e.latLng) {
             setMarker(e.latLng.toJSON());
           }
@@ -129,10 +128,10 @@ const Hints = ({ hints, hintsViewed, show, onHide, onTipView }: HintsProps) => {
 };
 
 interface Props {
-  current: typeof _data.levels[number];
-  userData: typeof _userData[number];
+  current: Level;
+  userData?: UserLevel;
   onNext: () => void
-  onGuess: (data: any, time: number, distance: number) => void;
+  onGuess: (data: OSMData, time: number, distance: number) => void;
   onHintViewed: (index: number, time: number) => void;
 }
 
@@ -141,10 +140,7 @@ const Level: React.FC<Props> = ({ current, userData, onNext, onGuess, onHintView
   const [hintsModalOpened, setHintsModalOpened] = useState(false);
   const time = useRef(0); // Not ideal, but :(
 
-  const hintsViewed = useMemo(
-    () => userData.hints.filter(h => h.viewed),
-    [userData.hints.length]
-  );
+  const hintsViewed = userData ? userData.hints.filter(h => h.viewed) : [];
   const extraPoints = hintsViewed.length * 100;
 
   return (
