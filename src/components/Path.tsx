@@ -1,8 +1,6 @@
 import React, { useState } from "react"
 import Button from "./Button";
-import "slick-carousel/slick/slick.css";
 import useDimensions from "react-use-dimensions";
-import OpenStreetMapsData from "./OpenStreetMapData";
 import Modal from "./Modal";
 
 
@@ -34,15 +32,11 @@ const Levels: React.FC<Props & { style?: React.CSSProperties }> = ({ style = {},
                         <span className={`level-number ${!bestGuess ? "never-tried" : ""}`}>{level.id}</span>
 
                         {bestGuess && (
-                            <>
-                                <OpenStreetMapsData
-                                    data={bestGuess.data}
-                                    className="best-guess"
-                                    distance={bestGuess.distance}
-                                >
-                                    <span>Dicas: {bestGuess.hints_viewed}</span>
-                                </OpenStreetMapsData>
-                            </>
+                            <div className="best-guess-path">
+                                <span className="best-guess-path-title">Melhor palpite</span>
+                                <span>Distância: {bestGuess.distance.toFixed(2)} km</span>
+                                <span>Dicas: {bestGuess.hints_viewed}</span>
+                            </div>
                         )}
                     </Button>
                 );

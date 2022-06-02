@@ -1,11 +1,11 @@
 import { InfoWindow, Marker } from '@react-google-maps/api';
-import React, { useRef, useState } from 'react';
+import React, { FormEvent, useRef, useState } from 'react';
 import useSWR from 'swr';
 import _data from '../data.json';
 import _userData from '../user-data.json';
 import Button from './Button';
 
-import Map from './Map';
+import Map, { DEFAULT_COORDINATES, DEFAULT_ZOOM, getZoom } from './Map';
 import Modal from './Modal';
 import OpenStreetMapsData from './OpenStreetMapData';
 import Spinner from './Spinner';
@@ -33,7 +33,7 @@ const Data = ({ position, onConfirm }: { position: google.maps.LatLngLiteral, on
   );
 
   if (data.error || !data.address) {
-    return <span className='data-container'>Not able to get data, try again.</span>;
+    return <span className='data-container'>Não consegui localizar, tente novamente.</span>;
   }
 
   return (
@@ -47,11 +47,48 @@ const Data = ({ position, onConfirm }: { position: google.maps.LatLngLiteral, on
 
 const PlaceChooser: React.FC<PlaceChooserProps> = ({ marker, onMapClick, onConfirm }) => {
   const [showInfoWindow, setShowInfoWindow] = useState(false);
+  const [coordinates, setCoordinates] = useState(DEFAULT_COORDINATES);
+  const [zoom, setZoom] = useState(DEFAULT_ZOOM);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const locale = (event.target as HTMLFormElement)["locale"].value;
+    const encoded = encodeURIComponent(locale);
+
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search.php?q=${encoded}&polygon_geojson=1&format=jsonv2`
+    )
+    const data = await response.json();
+
+    if (data && data[0]) {
+      setCoordinates({
+        lat: Number(data[0].lat),
+        lng: Number(data[0].lon),
+      });
+      const zoom = getZoom(
+        Number(data[0].boundingbox[0]),
+        Number(data[0].boundingbox[2]),
+        Number(data[0].boundingbox[1]),
+        Number(data[0].boundingbox[3]),
+      )
+      setZoom(zoom);
+    }
+  }
 
   return (
-    <div className="full">
-      <div className="full">
+    <div className="place-chooser-container">
+      <div className="search-place-form">
+        <form onSubmit={handleSubmit}>
+          <input name="locale" id="locale" />
+          <Button>Pesquisar</Button>
+        </form>
+      </div>
+      <div className="place-chooser-map-container">
         <Map
+          coordinates={coordinates}
+          zoom={zoom}
+          options={{ clickableIcons: false }}
           onMapClick={onMapClick}
         >
           {marker && (
@@ -109,20 +146,20 @@ interface HintsProps {
 const Hints = ({ hints, hintsViewed, show, onHide, onTipView }: HintsProps) => {
   return (
     <Modal show={show} onHide={onHide}>
-      <div className="full">
-        <ul>
-          {hints.map((hint) => {
-            if (hintsViewed.find(h => h.id === hint.id)) {
-              return <li key={hint.id}>{hint.description}</li>;
-            }
-            return (
-              <li key={hint.id}>
-                <Button onClick={() => onTipView(hint.id)}>Mostrar</Button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <ul>
+        {hints.map((hint) => {
+          const hintView = hintsViewed.find(h => h.id === hint.id);
+          if (hintView) {
+            return <li key={hint.id}>{hint.description}</li>;
+          }
+
+          return (
+            <li key={hint.id}>
+              <Button onClick={() => onTipView(hint.id)}>Mostrar</Button>
+            </li>
+          );
+        })}
+      </ul>
     </Modal>
   );
 };
@@ -169,7 +206,11 @@ const Level: React.FC<Props> = ({ current, userData, onNext, onGuess, onHintView
       </div>
 
       <div className="game-body full-height">
-        <StreetView coordinates={current.coordinates} />
+        <StreetView
+          markers={current.markers}
+          guesses={userData?.guesses || []}
+          coordinates={current.coordinates}
+        />
       </div>
 
       <PlaceChooserModal

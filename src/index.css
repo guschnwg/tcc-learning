@@ -129,10 +129,10 @@ button:active {
 }
 
 .level-number {
-  font-size: 28px;
+  font-size: 48px;
 }
 .level-number.never-tried {
-  font-size: 56px;
+  font-size: 72px;
 }
 
 .data-container {
@@ -312,4 +312,42 @@ button:active {
 .levels-container {
   display: flex;
   flex-wrap: wrap;
+}
+
+.best-guess-path {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  margin-top: 30px;
+}
+.best-guess-path-title {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.place-chooser-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.search-place-form {
+  margin-bottom: 10px;
+}
+.search-place-form > form {
+  display: flex;
+}
+.search-place-form > form > input {
+  width: 100%;
+  font-size: 26px;
+  color: #323dbb;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.search-place-form > form > button {
+  margin-right: 0;
+}
+
+.place-chooser-map-container {
+  flex: 1;
 }

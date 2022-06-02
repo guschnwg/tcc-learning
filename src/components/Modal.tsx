@@ -18,11 +18,12 @@ const Modal: React.FC<Props> = ({ children, show, onHide }) => {
           backgroundColor: undefined,
         },
         content: {
-          inset: '150px 40px 40px 40px',
+          inset: '150px',
           border: '1px solid #1d246e',
           background: '#323dbb',
           borderRadius: '12px',
           color: 'white',
+          padding: '10px',
         },
       }}
     >

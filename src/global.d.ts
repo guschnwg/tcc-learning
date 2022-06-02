@@ -92,7 +92,14 @@ declare global {
     id: number
     city: City
     hints: Hint[]
+    markers: LevelMarker[]
     coordinates: Coordinates
+  }
+
+  interface LevelMarker {
+    coordinates: Coordinates
+    data: string
+    user: string
   }
 
   export interface City {
