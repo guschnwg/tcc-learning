@@ -164,7 +164,7 @@ const Level: React.FC<Props> = ({ current, userData, onNext, onGuess, onHintView
         </div>
 
         <div>
-          <Button onClick={onNext}>Pular</Button>
+          <Button onClick={() => onNext()}>Pular</Button>
         </div>
       </div>
 
