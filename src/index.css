@@ -284,6 +284,9 @@ button:active {
   height: 100%;
   background: #323dbb;
 }
+.login-container > span {
+  color: white;
+}
 .login-container > form > div {
   display: flex;
   flex-direction: column;

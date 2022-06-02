@@ -1,9 +1,9 @@
 import React from 'react';
-import { GoogleMap } from '@react-google-maps/api';
+import { GoogleMap, Marker } from '@react-google-maps/api';
 import { StreetViewPanorama } from '@react-google-maps/api';
 
 interface Props {
-  coordinates?: { lat: number; lng: number };
+  coordinates?: google.maps.LatLngLiteral;
 }
 
 const defaultCoordinates = {
@@ -22,9 +22,13 @@ const StreetView: React.FC<Props> = ({ coordinates = defaultCoordinates }) => {
   };
 
   return (
-    <GoogleMap mapContainerStyle={{ height: '100%' }} center={coordinates} zoom={10}>
-      <StreetViewPanorama options={streetViewPanoramaOptions} />
-    </GoogleMap>
+    <>
+      <GoogleMap mapContainerStyle={{ height: '100%' }} center={coordinates} zoom={10}>
+        <StreetViewPanorama options={streetViewPanoramaOptions} />
+
+        <Marker position={coordinates} />
+      </GoogleMap>
+    </>
   );
 };
 

@@ -1,7 +1,5 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import { createClient, PostgrestError } from '@supabase/supabase-js'
-
-import game from '../data.json';
 
 import Level from './Level';
 import Path from './Path';
@@ -11,7 +9,25 @@ const supabase = createClient('https://ddzlknjoifzrxzclbzop.supabase.co', proces
 
 const Game: React.FC = () => {
   const [data, setData] = useState<UserData>();
+  const [levels, setLevels] = useState<Level[]>();
   const [error, setError] = useState<PostgrestError>();
+
+  const fetchLevels = async () => {
+    const { data, error } = await supabase.from('levels').select();
+
+    if (error) {
+      setError(error);
+    }
+    if (data) {
+      setLevels(data);
+    }
+  }
+
+  useEffect(() => {
+    if (data && !levels) {
+      fetchLevels();
+    }
+  }, [data, levels]);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -43,17 +59,21 @@ const Game: React.FC = () => {
     }
   }
 
+  if (error) {
+    return (
+      <div className="login-container">
+        <pre>
+          {JSON.stringify(error, null, 2)}
+        </pre>
+
+        <Button onClick={() => setError(undefined)}>Retry</Button>
+      </div>
+    )
+  }
+
   if (!data) {
     return (
       <div className="login-container">
-        {error && (
-          <div>
-            <pre>
-              {JSON.stringify(error, null, 2)}
-            </pre>
-          </div>
-        )}
-
         <form onSubmit={onSubmit}>
           <div>
             <label htmlFor="name">User</label>
@@ -67,15 +87,26 @@ const Game: React.FC = () => {
     );
   }
 
-  return <InternalGame data={data} onUpdate={setData} />
+  if (!levels) {
+    return (
+      <div className="login-container">
+        <span>
+          Loading levels...
+        </span>
+      </div>
+    )
+  }
+
+  return <InternalGame levels={levels} data={data} onUpdate={setData} />
 }
 
 interface GameProps {
+  levels: Level[]
   data: UserData
   onUpdate: (data: UserData) => void
 }
 
-const InternalGame: React.FC<GameProps> = ({ data, onUpdate }) => {
+const InternalGame: React.FC<GameProps> = ({ levels, data, onUpdate }) => {
   const [index, setIndex] = useState(1);
 
   const update = async (theNewUserData: UserData) => {
@@ -162,7 +193,7 @@ const InternalGame: React.FC<GameProps> = ({ data, onUpdate }) => {
     <div className="full">
       <Level
         // eslint-disable-next-line
-        current={game.levels.find(l => l.id === index)!}
+        current={levels.find(l => l.id === index)!}
         userData={data.data.find(ud => ud.level_id === index)}
         onNext={handleNext}
         onGuess={handleGuess}
@@ -170,7 +201,7 @@ const InternalGame: React.FC<GameProps> = ({ data, onUpdate }) => {
       />
 
       <Path
-        levels={game.levels}
+        levels={levels}
         userData={data.data}
         current={index}
         onLevelClick={handleNext}
