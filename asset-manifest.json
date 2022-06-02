@@ -1,28 +1,25 @@
 {
   "files": {
-    "main.css": "/tcc-learning/static/css/main.1d875f4b.chunk.css",
-    "main.js": "/tcc-learning/static/js/main.5498cf41.chunk.js",
-    "main.js.map": "/tcc-learning/static/js/main.5498cf41.chunk.js.map",
-    "runtime-main.js": "/tcc-learning/static/js/runtime-main.ea3c908b.js",
-    "runtime-main.js.map": "/tcc-learning/static/js/runtime-main.ea3c908b.js.map",
-    "static/css/2.abcd5c43.chunk.css": "/tcc-learning/static/css/2.abcd5c43.chunk.css",
-    "static/js/2.b28de92d.chunk.js": "/tcc-learning/static/js/2.b28de92d.chunk.js",
-    "static/js/2.b28de92d.chunk.js.map": "/tcc-learning/static/js/2.b28de92d.chunk.js.map",
-    "static/js/3.a721778d.chunk.js": "/tcc-learning/static/js/3.a721778d.chunk.js",
-    "static/js/3.a721778d.chunk.js.map": "/tcc-learning/static/js/3.a721778d.chunk.js.map",
+    "main.css": "/tcc-learning/static/css/main.aa37079e.chunk.css",
+    "main.js": "/tcc-learning/static/js/main.a2fed11f.chunk.js",
+    "main.js.map": "/tcc-learning/static/js/main.a2fed11f.chunk.js.map",
+    "runtime-main.js": "/tcc-learning/static/js/runtime-main.771a8d75.js",
+    "runtime-main.js.map": "/tcc-learning/static/js/runtime-main.771a8d75.js.map",
+    "static/js/2.f688115f.chunk.js": "/tcc-learning/static/js/2.f688115f.chunk.js",
+    "static/js/2.f688115f.chunk.js.map": "/tcc-learning/static/js/2.f688115f.chunk.js.map",
+    "static/js/3.0e778eca.chunk.js": "/tcc-learning/static/js/3.0e778eca.chunk.js",
+    "static/js/3.0e778eca.chunk.js.map": "/tcc-learning/static/js/3.0e778eca.chunk.js.map",
     "index.html": "/tcc-learning/index.html",
-    "static/css/2.abcd5c43.chunk.css.map": "/tcc-learning/static/css/2.abcd5c43.chunk.css.map",
-    "static/css/main.1d875f4b.chunk.css.map": "/tcc-learning/static/css/main.1d875f4b.chunk.css.map",
-    "static/js/2.b28de92d.chunk.js.LICENSE.txt": "/tcc-learning/static/js/2.b28de92d.chunk.js.LICENSE.txt",
-    "static/js/main.5498cf41.chunk.js.LICENSE.txt": "/tcc-learning/static/js/main.5498cf41.chunk.js.LICENSE.txt",
+    "static/css/main.aa37079e.chunk.css.map": "/tcc-learning/static/css/main.aa37079e.chunk.css.map",
+    "static/js/2.f688115f.chunk.js.LICENSE.txt": "/tcc-learning/static/js/2.f688115f.chunk.js.LICENSE.txt",
+    "static/js/main.a2fed11f.chunk.js.LICENSE.txt": "/tcc-learning/static/js/main.a2fed11f.chunk.js.LICENSE.txt",
     "static/media/index.css": "/tcc-learning/static/media/Nougat-ExtraBlack.5106bbca.ttf",
     "static/media/click-2.66336ee5.wav": "/tcc-learning/static/media/click-2.66336ee5.wav"
   },
   "entrypoints": [
-    "static/js/runtime-main.ea3c908b.js",
-    "static/css/2.abcd5c43.chunk.css",
-    "static/js/2.b28de92d.chunk.js",
-    "static/css/main.1d875f4b.chunk.css",
-    "static/js/main.5498cf41.chunk.js"
+    "static/js/runtime-main.771a8d75.js",
+    "static/js/2.f688115f.chunk.js",
+    "static/css/main.aa37079e.chunk.css",
+    "static/js/main.a2fed11f.chunk.js"
   ]
 }
