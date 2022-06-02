@@ -1,11 +1,9 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronUp, faChevronDown, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
-import React, { useRef, useState } from "react"
+import React, { useState } from "react"
 import Button from "./Button";
 import "slick-carousel/slick/slick.css";
 import useDimensions from "react-use-dimensions";
-import Slider, { Settings } from "react-slick";
 import OpenStreetMapsData from "./OpenStreetMapData";
+import Modal from "./Modal";
 
 
 interface Props {
@@ -15,65 +13,87 @@ interface Props {
     onLevelClick: (index: number) => void
 }
 
+const Levels: React.FC<Props & { style?: React.CSSProperties }> = ({ style = {}, current, levels, userData, onLevelClick }) => {
+    return (
+        <>
+            {levels.map(level => {
+                const data = userData.find(d => d.level_id === level.id);
+
+                let bestGuess = null;
+                if (data && data.guesses) {
+                    bestGuess = data.guesses.sort((g1, g2) => g1.distance - g2.distance)[0];
+                }
+
+                return (
+                    <Button
+                        key={level.id}
+                        className={`path-content-level full ${current === level.id ? "current" : ""}`}
+                        onClick={() => onLevelClick(level.id)}
+                        style={style}
+                    >
+                        <span className={`level-number ${!bestGuess ? "never-tried" : ""}`}>{level.id}</span>
+
+                        {bestGuess && (
+                            <>
+                                <OpenStreetMapsData
+                                    data={bestGuess.data}
+                                    className="best-guess"
+                                    distance={bestGuess.distance}
+                                >
+                                    <span>Dicas: {bestGuess.hints_viewed}</span>
+                                </OpenStreetMapsData>
+                            </>
+                        )}
+                    </Button>
+                );
+            })}
+        </>
+    )
+}
+
 const Path: React.FC<Props> = ({ levels, userData, current, onLevelClick }) => {
     const [show, setShow] = useState(false);
-    const stateClass = show ? "shown" : "hidden"
-    const sliderRef = useRef<React.LegacyRef<Slider>>()
     const [ref, { width }] = useDimensions();
 
-    const settings: Settings = {
-        slidesToShow: width ? Math.floor((width) / (180 + 40)) : 1,
-        slidesToScroll: 4,
-        infinite: false,
-        waitForAnimate: false,
-        prevArrow: <Button><FontAwesomeIcon icon={faChevronLeft} /></Button>,
-        nextArrow: <Button><FontAwesomeIcon icon={faChevronRight} /></Button>,
-    };
+    let divider = 2;
+    if (width > 2500) {
+        divider = 7;
+    } else if (width > 1800) {
+        divider = 6;
+    } else if (width > 1200) {
+        divider = 5;
+    } else if (width > 850) {
+        divider = 4;
+    } else if (width > 600) {
+        divider = 3;
+    }
 
     return (
-        <div className={`path-container ${stateClass}`}>
+        <div className="path-container shown">
             <Button onClick={() => setShow(prev => !prev)}>
                 Níveis
-                {" "}
-                <FontAwesomeIcon icon={show ? faChevronDown : faChevronUp} />
             </Button>
 
-            <div className="path-content">
-                <div ref={ref}>
-                    <Slider {...settings} ref={sliderRef.current}>
-                        {levels.map(level => {
-                            const data = userData.find(d => d.level_id === level.id);
-
-                            let bestGuess = null;
-                            if (data && data.guesses) {
-                                bestGuess = data.guesses.sort((g1, g2) => g1.distance - g2.distance)[0];
-                            }
-
-                            return (
-                                <Button
-                                    key={level.id}
-                                    className={`path-content-level full ${current === level.id && "current"}`}
-                                    onClick={() => onLevelClick(level.id)}
-                                >
-                                    <span className={`level-number ${!bestGuess && "never-tried"}`}>{level.id}</span>
-
-                                    {bestGuess && (
-                                        <>
-                                            <OpenStreetMapsData
-                                                data={bestGuess.data}
-                                                className="best-guess"
-                                                distance={bestGuess.distance}
-                                            >
-                                                <span>Dicas: {bestGuess.hints_viewed}</span>
-                                            </OpenStreetMapsData>
-                                        </>
-                                    )}
-                                </Button>
-                            );
-                        })}
-                    </Slider>
+            <Modal show={show} onHide={() => setShow(false)}>
+                <div className="levels-container" ref={ref}>
+                    <Levels
+                        style={{
+                            width: width / divider - 20,
+                            height: width / divider - 20,
+                            margin: 10,
+                        }}
+                        levels={levels}
+                        userData={userData}
+                        current={current}
+                        onLevelClick={level => {
+                            onLevelClick(level);
+                            setShow(false);
+                        }}
+                    />
                 </div>
-            </div>
+
+                <div>Mais por vir...</div>
+            </Modal>
         </div>
     )
 }
