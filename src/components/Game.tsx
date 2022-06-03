@@ -13,7 +13,7 @@ const Game: React.FC = () => {
   const [error, setError] = useState<PostgrestError>();
 
   const fetchLevels = async () => {
-    const { data, error } = await supabase.from('levels').select();
+    const { data, error } = await supabase.from('levels').select().order("id");
 
     if (error) {
       setError(error);
@@ -107,12 +107,14 @@ interface GameProps {
 }
 
 const InternalGame: React.FC<GameProps> = ({ levels, data, onUpdate }) => {
-  const [index, setIndex] = useState(1);
+  const [index, setIndex] = useState(2);
 
-  const update = async (theNewUserData: UserData) => {
+  const update = async (theNewUserData: UserData, updateState = true) => {
     const { data } = await supabase.from<UserData>('data').update({ data: theNewUserData.data }).match({ id: theNewUserData.id });
     if (data && data[0]) {
-      onUpdate(data[0]);
+      if (updateState) {
+        onUpdate(data[0]);
+      }
       return true;
     }
 
@@ -134,6 +136,7 @@ const InternalGame: React.FC<GameProps> = ({ levels, data, onUpdate }) => {
       theNewUserData.data.push({
         "id": theNewUserData.data.length,
         "level_id": index,
+        "current_time": 0,
         "hints": [theHint],
         "guesses": [],
         "completed": false,
@@ -152,6 +155,7 @@ const InternalGame: React.FC<GameProps> = ({ levels, data, onUpdate }) => {
       theNewUserData.data.push({
         "id": theNewUserData.data.length,
         "level_id": nextIndex,
+        "current_time": 0,
         "hints": [],
         "guesses": [],
         "completed": false,
@@ -180,6 +184,7 @@ const InternalGame: React.FC<GameProps> = ({ levels, data, onUpdate }) => {
       theNewUserData.data.push({
         "id": theNewUserData.data.length,
         "level_id": index,
+        "current_time": 0,
         "hints": [],
         "guesses": [theGuess],
         "completed": false,
@@ -187,6 +192,26 @@ const InternalGame: React.FC<GameProps> = ({ levels, data, onUpdate }) => {
     }
 
     await update(theNewUserData);
+  }
+
+  const handleTimePassed = async (time: number) => {
+    const theNewUserData = JSON.parse(JSON.stringify(data)) as UserData;
+
+    const levelData = theNewUserData.data.find(ud => ud.level_id === index);
+    if (levelData) {
+      levelData.current_time = time;
+    } else {
+      theNewUserData.data.push({
+        "id": theNewUserData.data.length,
+        "level_id": index,
+        "current_time": time,
+        "hints": [],
+        "guesses": [],
+        "completed": false,
+      })
+    }
+
+    await update(theNewUserData, false);
   }
 
   return (
@@ -198,6 +223,7 @@ const InternalGame: React.FC<GameProps> = ({ levels, data, onUpdate }) => {
         onNext={handleNext}
         onGuess={handleGuess}
         onHintViewed={handleHintViewed}
+        onTimePassed={handleTimePassed}
       />
 
       <Path

@@ -72,8 +72,8 @@ const Path: React.FC<Props> = ({ levels, userData, current, onLevelClick }) => {
                 <div className="levels-container" ref={ref}>
                     <Levels
                         style={{
-                            width: width / divider - 20,
-                            height: width / divider - 20,
+                            width: (width || 0) / divider - 20,
+                            height: (width || 0) / divider - 20,
                             margin: 10,
                         }}
                         levels={levels}

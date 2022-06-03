@@ -1,8 +1,10 @@
 declare global {
   interface PlaceChooserModalProps {
     show: boolean
+    coordinates: google.maps.LatLngLiteral
+    guesses: Guess[]
     onHide: () => void
-    onConfirm: (location: google.maps.LatLngLiteral, data: OSMData) => void
+    onConfirm: (data: OSMData, distance: number) => void
   }
 
   interface OpenStreetMapDataProps {
@@ -12,9 +14,9 @@ declare global {
   }
 
   interface PlaceChooserProps {
-    marker?: google.maps.LatLngLiteral
-    onMapClick: (e: google.maps.MapMouseEvent) => void
-    onConfirm: any
+    coordinates: google.maps.LatLngLiteral
+    guesses: Guess[]
+    onConfirm: (data: OSMData, distance: number) => void
   }
 
   //
@@ -72,6 +74,7 @@ declare global {
   interface UserLevel {
     id: number
     level_id: number
+    current_time: number
     completed: boolean
     hints: HintView[]
     guesses: Guess[]

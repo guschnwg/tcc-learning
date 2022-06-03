@@ -1,5 +1,5 @@
 import { InfoWindow, Marker } from '@react-google-maps/api';
-import React, { FormEvent, useRef, useState } from 'react';
+import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
 import _data from '../data.json';
 import _userData from '../user-data.json';
@@ -25,7 +25,7 @@ const haversineDistance = (mk1: google.maps.LatLngLiteral, mk2: google.maps.LatL
   return d;
 }
 
-const Data = ({ position, onConfirm }: { position: google.maps.LatLngLiteral, onConfirm: (data: OSMData) => void }) => {
+const Data: React.FC<{ position: google.maps.LatLngLiteral, showConfirmButton: boolean, onConfirm?: (data: OSMData) => void }> = ({ position, showConfirmButton, onConfirm, children }) => {
   const { data } = useSWR(
     `https://nominatim.openstreetmap.org/reverse.php?lat=${position.lat}&lon=${position.lng}&zoom=18&format=jsonv2`,
     fetcher,
@@ -38,17 +38,88 @@ const Data = ({ position, onConfirm }: { position: google.maps.LatLngLiteral, on
 
   return (
     <>
-      <OpenStreetMapsData data={data} />
+      <OpenStreetMapsData data={data}>
+        {children}
+      </OpenStreetMapsData>
 
-      <Button onClick={() => onConfirm(data)}>Confirmar</Button>
+      {showConfirmButton && <Button onClick={() => onConfirm && onConfirm(data)}>Confirmar</Button>}
     </>
-  )
+  );
 };
 
-const PlaceChooser: React.FC<PlaceChooserProps> = ({ marker, onMapClick, onConfirm }) => {
+const PlaceChooserMarker: React.FC<{ coordinates: google.maps.LatLngLiteral, marker: google.maps.LatLngLiteral, onConfirm: (data: OSMData, distance: number) => void }> = ({ coordinates, marker, onConfirm }) => {
   const [showInfoWindow, setShowInfoWindow] = useState(false);
-  const [coordinates, setCoordinates] = useState(DEFAULT_COORDINATES);
+  const [showDistance, setShowDistance] = useState(false);
+  const distance = useMemo(() => {
+    return haversineDistance(marker, coordinates);
+  }, [marker, coordinates]);
+
+  useEffect(() => {
+    setShowDistance(false);
+  }, [marker])
+
+  const handleConfirm = (data: OSMData) => {
+    setShowDistance(true);
+    onConfirm(data, distance);
+  }
+
+  return (
+    <Marker
+      position={marker}
+      onClick={() => setShowInfoWindow(true)}
+      onPositionChanged={() => setShowInfoWindow(true)}
+      onLoad={() => setShowInfoWindow(true)}
+    >
+      {showInfoWindow && (
+        <InfoWindow onCloseClick={() => setShowInfoWindow(false)}>
+          <React.Suspense fallback={<Spinner color="#323dbb" />}>
+            <Data position={marker} showConfirmButton={!showDistance} onConfirm={handleConfirm}>
+              {showDistance && (
+                <span>Distância: {distance.toFixed(2)}km</span>
+              )}
+            </Data>
+          </React.Suspense>
+        </InfoWindow>
+      )}
+    </Marker>
+  )
+}
+
+const PlaceChooserGuesses: React.FC<{ guesses: Guess[] }> = ({ guesses }) => {
+  const [showInfoWindowId, setShowInfoWindowId] = useState<number>();
+
+  return (
+    <>
+      {guesses.map(guess => {
+        const marker = { lat: Number(guess.data.lat), lng: Number(guess.data.lon) };
+        return (
+          <Marker
+            key={guess.id}
+            position={marker}
+            icon="https://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
+            onClick={() => setShowInfoWindowId(guess.id)}
+          >
+            {showInfoWindowId == guess.id && (
+              <InfoWindow onCloseClick={() => setShowInfoWindowId(guess.id)}>
+                <React.Suspense fallback={<Spinner color="#323dbb" />}>
+                  <Data position={marker} showConfirmButton={false}>
+                    <span>Distância: {guess.distance.toFixed(2)}km</span>
+                    <span>Palpite aos {guess.timestamp}s</span>
+                  </Data>
+                </React.Suspense>
+              </InfoWindow>
+            )}
+          </Marker>
+        )}
+      )}
+    </>
+  )
+}
+
+const PlaceChooser: React.FC<PlaceChooserProps> = ({ coordinates, guesses, onConfirm }) => {
+  const [mapCenter, setMapCenter] = useState(DEFAULT_COORDINATES);
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
+  const [marker, setMarker] = useState<google.maps.LatLngLiteral>();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -62,7 +133,7 @@ const PlaceChooser: React.FC<PlaceChooserProps> = ({ marker, onMapClick, onConfi
     const data = await response.json();
 
     if (data && data[0]) {
-      setCoordinates({
+      setMapCenter({
         lat: Number(data[0].lat),
         lng: Number(data[0].lon),
       });
@@ -86,26 +157,23 @@ const PlaceChooser: React.FC<PlaceChooserProps> = ({ marker, onMapClick, onConfi
       </div>
       <div className="place-chooser-map-container">
         <Map
-          coordinates={coordinates}
+          coordinates={mapCenter}
           zoom={zoom}
           options={{ clickableIcons: false }}
-          onMapClick={onMapClick}
+          onMapClick={e => {
+            if (e.latLng) {
+              setMarker(e.latLng.toJSON());
+            }
+          }}
         >
+          <PlaceChooserGuesses guesses={guesses} />
+
           {marker && (
-            <Marker
-              position={marker}
-              onClick={() => setShowInfoWindow(true)}
-              onPositionChanged={() => setShowInfoWindow(true)}
-              onLoad={() => setShowInfoWindow(true)}
-            >
-              {showInfoWindow && (
-                <InfoWindow onCloseClick={() => setShowInfoWindow(false)}>
-                  <React.Suspense fallback={<Spinner color="#323dbb" />}>
-                    <Data position={marker} onConfirm={onConfirm} />
-                  </React.Suspense>
-                </InfoWindow>
-              )}
-            </Marker>
+            <PlaceChooserMarker
+              coordinates={coordinates}
+              marker={marker}
+              onConfirm={onConfirm} 
+            />
           )}
         </Map>
       </div>
@@ -113,24 +181,10 @@ const PlaceChooser: React.FC<PlaceChooserProps> = ({ marker, onMapClick, onConfi
   )
 }
 
-const PlaceChooserModal = ({ show, onHide, onConfirm }: PlaceChooserModalProps) => {
-  const [marker, setMarker] = useState<google.maps.LatLngLiteral>();
-
+const PlaceChooserModal: React.FC<PlaceChooserModalProps> = ({ show, coordinates, guesses, onHide, onConfirm }) => {
   return (
     <Modal show={show} onHide={onHide}>
-      <PlaceChooser
-        marker={marker}
-        onMapClick={e => {
-          if (e.latLng) {
-            setMarker(e.latLng.toJSON());
-          }
-        }}
-        onConfirm={(data: OSMData) => {
-          if (marker) {
-            onConfirm(marker, data);
-          }
-        }}
-      />
+      <PlaceChooser coordinates={coordinates} guesses={guesses} onConfirm={onConfirm} />
     </Modal>
   );
 };
@@ -150,7 +204,7 @@ const Hints = ({ hints, hintsViewed, show, onHide, onTipView }: HintsProps) => {
         {hints.map((hint) => {
           const hintView = hintsViewed.find(h => h.id === hint.id);
           if (hintView) {
-            return <li key={hint.id}>{hint.description}</li>;
+            return <li key={hint.id}>{hint.description} - Visto aos {hintView.timestamp}s</li>;
           }
 
           return (
@@ -170,15 +224,15 @@ interface Props {
   onNext: () => void
   onGuess: (data: OSMData, time: number, distance: number) => void;
   onHintViewed: (index: number, time: number) => void;
+  onTimePassed: (time: number) => void
 }
 
-const Level: React.FC<Props> = ({ current, userData, onNext, onGuess, onHintViewed }) => {
+const Level: React.FC<Props> = ({ current, userData, onNext, onGuess, onHintViewed, onTimePassed }) => {
   const [mapModalOpened, setMapModalOpened] = useState(false);
   const [hintsModalOpened, setHintsModalOpened] = useState(false);
   const time = useRef(0); // Not ideal, but :(
 
   const hintsViewed = userData ? userData.hints.filter(h => h.viewed) : [];
-  const extraPoints = hintsViewed.length * 100;
 
   return (
     <div className="game-container full">
@@ -191,13 +245,12 @@ const Level: React.FC<Props> = ({ current, userData, onNext, onGuess, onHintView
         </div>
 
         <div>
-          <Stopwatch key={current.id} onChange={total => time.current = total}>
-            {extraPoints ? (
-              <span className="stopwatch-extra">
-                (+{extraPoints})
-              </span>
-            ) : null}
-          </Stopwatch>
+          <Stopwatch
+            key={current.id}
+            start={userData?.current_time || 0}
+            onChange={total => time.current = total}
+            onStep={onTimePassed}
+          />
         </div>
 
         <div>
@@ -215,9 +268,11 @@ const Level: React.FC<Props> = ({ current, userData, onNext, onGuess, onHintView
 
       <PlaceChooserModal
         show={mapModalOpened}
+        coordinates={current.coordinates}
+        guesses={userData?.guesses || []}
         onHide={() => setMapModalOpened(false)}
-        onConfirm={(location, data) => {
-          onGuess(data, time.current, haversineDistance(location, current.coordinates));
+        onConfirm={(data, distance) => {
+          onGuess(data, time.current, distance);
         }}
       />
 
