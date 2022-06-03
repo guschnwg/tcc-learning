@@ -99,7 +99,7 @@ const PlaceChooserGuesses: React.FC<{ guesses: Guess[] }> = ({ guesses }) => {
             icon="https://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
             onClick={() => setShowInfoWindowId(guess.id)}
           >
-            {showInfoWindowId == guess.id && (
+            {showInfoWindowId === guess.id && (
               <InfoWindow onCloseClick={() => setShowInfoWindowId(guess.id)}>
                 <React.Suspense fallback={<Spinner color="#323dbb" />}>
                   <Data position={marker} showConfirmButton={false}>
