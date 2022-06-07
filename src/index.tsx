@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import ReactModal from 'react-modal';
 
 import countries from 'i18n-iso-countries';
@@ -18,9 +18,9 @@ ReactModal.setAppElement(
 );
 
 ReactDOM.render(
-  <HashRouter>
+  <BrowserRouter basename='/tcc-learning'>
     <App />
-  </HashRouter>,
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

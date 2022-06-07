@@ -3,6 +3,7 @@ import React from 'react';
 
 import { Routes, Route } from 'react-router-dom';
 import Game from './Game';
+import Leaderboard from './Leaderboard';
 
 import Map from './Map';
 import StreetView from './StreetView';
@@ -23,8 +24,9 @@ const App: React.FC = () => {
       <div className="full">
         <Routes>
           <Route path="/" element={<Game />} />
-          <Route path="street-view" element={<StreetView coordinates={COORDINATES} />} />
-          <Route path="map" element={<Map coordinates={COORDINATES} />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/street-view" element={<StreetView coordinates={COORDINATES} />} />
+          <Route path="/map" element={<Map coordinates={COORDINATES} />} />
         </Routes>
       </div>
     </div>

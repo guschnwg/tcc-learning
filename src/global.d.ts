@@ -39,6 +39,18 @@ declare global {
     onConfirm: (marker: google.maps.LatLngLiteral, data: OSMData, distance: number) => void
   }
 
+  // 
+
+  interface LeaderboardData {
+    user: string
+    guesses: {
+      id: number
+      levelId: number
+      distance: number
+      hints: number
+    }[]
+  }
+
   //
 
   interface OSMAddress {
@@ -103,6 +115,7 @@ declare global {
 
   interface UserData {
     id: number
+    user: string
     guess_limit: number
     data: UserLevel[]
   }

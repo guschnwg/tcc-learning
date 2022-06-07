@@ -4,11 +4,8 @@ import { createClient, PostgrestError } from '@supabase/supabase-js'
 import Level from './Level';
 import Path from './Path';
 import Button from './Button';
-
-const supabase = createClient('https://ddzlknjoifzrxzclbzop.supabase.co', process.env.REACT_APP_SUPABASE_KEY || '');
-
-const USER_DATA_TABLE = "user_data";
-const LEVELS_TABLE = "levels";
+import { Link } from 'react-router-dom';
+import supabase, { LEVELS_TABLE, USER_DATA_TABLE } from '../supabase';
 
 const Game: React.FC = () => {
   const [data, setData] = useState<UserData>();
@@ -107,6 +104,10 @@ const Game: React.FC = () => {
             <Button>Entrar</Button>
           </div>
         </form>
+
+        {/* <Link to="/leaderboard">
+          Leaderboard
+        </Link> */}
       </div>
     );
   }
