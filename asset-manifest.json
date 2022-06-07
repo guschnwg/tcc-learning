@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/tcc-learning/static/css/main.5c9bcbf7.chunk.css",
-    "main.js": "/tcc-learning/static/js/main.638e508a.chunk.js",
-    "main.js.map": "/tcc-learning/static/js/main.638e508a.chunk.js.map",
+    "main.css": "/tcc-learning/static/css/main.ab45b929.chunk.css",
+    "main.js": "/tcc-learning/static/js/main.cfe9d5ff.chunk.js",
+    "main.js.map": "/tcc-learning/static/js/main.cfe9d5ff.chunk.js.map",
     "runtime-main.js": "/tcc-learning/static/js/runtime-main.771a8d75.js",
     "runtime-main.js.map": "/tcc-learning/static/js/runtime-main.771a8d75.js.map",
-    "static/js/2.85f65dbc.chunk.js": "/tcc-learning/static/js/2.85f65dbc.chunk.js",
-    "static/js/2.85f65dbc.chunk.js.map": "/tcc-learning/static/js/2.85f65dbc.chunk.js.map",
+    "static/js/2.58a35d45.chunk.js": "/tcc-learning/static/js/2.58a35d45.chunk.js",
+    "static/js/2.58a35d45.chunk.js.map": "/tcc-learning/static/js/2.58a35d45.chunk.js.map",
     "static/js/3.0e778eca.chunk.js": "/tcc-learning/static/js/3.0e778eca.chunk.js",
     "static/js/3.0e778eca.chunk.js.map": "/tcc-learning/static/js/3.0e778eca.chunk.js.map",
     "index.html": "/tcc-learning/index.html",
-    "static/css/main.5c9bcbf7.chunk.css.map": "/tcc-learning/static/css/main.5c9bcbf7.chunk.css.map",
-    "static/js/2.85f65dbc.chunk.js.LICENSE.txt": "/tcc-learning/static/js/2.85f65dbc.chunk.js.LICENSE.txt",
-    "static/js/main.638e508a.chunk.js.LICENSE.txt": "/tcc-learning/static/js/main.638e508a.chunk.js.LICENSE.txt",
+    "static/css/main.ab45b929.chunk.css.map": "/tcc-learning/static/css/main.ab45b929.chunk.css.map",
+    "static/js/2.58a35d45.chunk.js.LICENSE.txt": "/tcc-learning/static/js/2.58a35d45.chunk.js.LICENSE.txt",
+    "static/js/main.cfe9d5ff.chunk.js.LICENSE.txt": "/tcc-learning/static/js/main.cfe9d5ff.chunk.js.LICENSE.txt",
     "static/media/index.css": "/tcc-learning/static/media/Nougat-ExtraBlack.5106bbca.ttf",
     "static/media/click-2.66336ee5.wav": "/tcc-learning/static/media/click-2.66336ee5.wav"
   },
   "entrypoints": [
     "static/js/runtime-main.771a8d75.js",
-    "static/js/2.85f65dbc.chunk.js",
-    "static/css/main.5c9bcbf7.chunk.css",
-    "static/js/main.638e508a.chunk.js"
+    "static/js/2.58a35d45.chunk.js",
+    "static/css/main.ab45b929.chunk.css",
+    "static/js/main.cfe9d5ff.chunk.js"
   ]
 }
