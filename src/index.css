@@ -309,6 +309,8 @@ button:active {
   border: #232b82 5px solid;
   margin: 0;
   margin-bottom: 15px;
+  width: 100%;
+  box-sizing: border-box;
 }
 .login-container > form > div > button {
   margin: 0;

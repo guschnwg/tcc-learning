@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, useEffect } from 'react';
+import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import { createClient, PostgrestError } from '@supabase/supabase-js'
 
 import Level from './Level';
@@ -7,13 +7,17 @@ import Button from './Button';
 
 const supabase = createClient('https://ddzlknjoifzrxzclbzop.supabase.co', process.env.REACT_APP_SUPABASE_KEY || '');
 
+const USER_DATA_TABLE = "user_data";
+const LEVELS_TABLE = "levels";
+
 const Game: React.FC = () => {
   const [data, setData] = useState<UserData>();
   const [levels, setLevels] = useState<Level[]>();
   const [error, setError] = useState<PostgrestError>();
+  const [guessesNumber, setGuessesNumber] = useState(window.localStorage.getItem("guess_limit") || "5");
 
   const fetchLevels = async () => {
-    const { data, error } = await supabase.from('levels').select().order("id");
+    const { data, error } = await supabase.from(LEVELS_TABLE).select().order("id");
 
     if (error) {
       setError(error);
@@ -33,8 +37,14 @@ const Game: React.FC = () => {
     event.preventDefault();
 
     const user = (event.target as HTMLFormElement)["user"].value;
+    const guessLimit = Number((event.target as HTMLFormElement)["guess_limit"].value || "0");
 
-    const { data, error } = await supabase.from('data').select().eq('user', user);
+    if (!user) {
+      alert("Informe o nome do jogador")
+      return;
+    }
+
+    const { data, error } = await supabase.from(USER_DATA_TABLE).select().eq('user', user).eq('guess_limit', guessLimit);
     if (error) {
       setError(error);
       return;
@@ -42,15 +52,17 @@ const Game: React.FC = () => {
     if (data && data[0]) {
       setData(data[0]);
       window.localStorage.setItem("user", user);
+      window.localStorage.setItem("guess_limit", guessLimit.toString());
       return;
     }
 
-    if (window.confirm("No user, create?")) {
-      const { data, error } = await supabase.from('data').insert([{ user, data: [] }]);
+    if (window.confirm("Criar novo jogador?")) {
+      const { data, error } = await supabase.from(USER_DATA_TABLE).insert([{ user, guess_limit: guessLimit, data: [] }]);
 
       if (data && data[0]) {
         setData(data[0]);
         window.localStorage.setItem("user", user);
+        window.localStorage.setItem("guess_limit", guessLimit.toString());
       }
 
       if (error) {
@@ -76,8 +88,20 @@ const Game: React.FC = () => {
       <div className="login-container">
         <form onSubmit={onSubmit}>
           <div>
-            <label htmlFor="name">User</label>
+            <label htmlFor="user">Nome do Jogador</label>
             <input name="user" id="user" defaultValue={window.localStorage.getItem("user") || ""} />
+          </div>
+          <div hidden>
+            <label htmlFor="guess_limit">Número de Palpites: {guessesNumber === "0" ? "Ilimitado" : guessesNumber}</label>
+            <input
+              type="range"
+              name="guess_limit"
+              id="guess_limit"
+              defaultValue={guessesNumber}
+              onInput={e => setGuessesNumber((e.target as any).value)}
+              min="0"
+              max="10"
+            />
           </div>
           <div>
             <Button>Entrar</Button>
@@ -110,7 +134,7 @@ const InternalGame: React.FC<GameProps> = ({ levels, data, onUpdate }) => {
   const [index, setIndex] = useState(2);
 
   const update = async (theNewUserData: UserData, updateState = true) => {
-    const { data } = await supabase.from<UserData>('data').update({ data: theNewUserData.data }).match({ id: theNewUserData.id });
+    const { data } = await supabase.from<UserData>(USER_DATA_TABLE).update({ data: theNewUserData.data }).match({ id: theNewUserData.id });
     if (data && data[0]) {
       if (updateState) {
         onUpdate(data[0]);
@@ -167,13 +191,14 @@ const InternalGame: React.FC<GameProps> = ({ levels, data, onUpdate }) => {
     }
   }
 
-  const handleGuess = async (osmData: OSMData, time: number, distance: number) => {
+  const handleGuess = async (marker: google.maps.LatLngLiteral, osmData: OSMData, time: number, distance: number) => {
     const theNewUserData = JSON.parse(JSON.stringify(data)) as UserData;
 
     const levelData = theNewUserData.data.find(ud => ud.level_id === index);
     const theGuess = {
       "id": levelData ? levelData.guesses.length + 1 : 1,
       "distance": distance,
+      "coordinates": marker,
       "timestamp": time,
       "hints_viewed": levelData ? levelData.hints.length : 0,
       "data": osmData,
@@ -192,6 +217,8 @@ const InternalGame: React.FC<GameProps> = ({ levels, data, onUpdate }) => {
     }
 
     await update(theNewUserData);
+
+    return theGuess;
   }
 
   const handleTimePassed = async (time: number) => {
@@ -214,11 +241,16 @@ const InternalGame: React.FC<GameProps> = ({ levels, data, onUpdate }) => {
     await update(theNewUserData, false);
   }
 
+  const level = levels.find(l => l.id === index);
+  if (!level) {
+    return <span>Nenhum nível aqui!</span>;
+  }
+
   return (
     <div className="full">
       <Level
-        // eslint-disable-next-line
-        current={levels.find(l => l.id === index)!}
+        current={level}
+        guessLimit={data.guess_limit}
         userData={data.data.find(ud => ud.level_id === index)}
         onNext={handleNext}
         onGuess={handleGuess}

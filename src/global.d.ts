@@ -1,10 +1,21 @@
 declare global {
+  interface LevelProps {
+    current: Level;
+    guessLimit: number
+    userData?: UserLevel;
+    onNext: () => void
+    onGuess: (marker: google.maps.LatLngLiteral, data: OSMData, time: number, distance: number) => Promise<Guess>;
+    onHintViewed: (index: number, time: number) => void;
+    onTimePassed: (time: number) => void
+  }
+
   interface PlaceChooserModalProps {
     show: boolean
+    canGuess: boolean
     coordinates: google.maps.LatLngLiteral
     guesses: Guess[]
     onHide: () => void
-    onConfirm: (data: OSMData, distance: number) => void
+    onConfirm: (marker: google.maps.LatLngLiteral, data: OSMData, distance: number) => Promise<Guess>
   }
 
   interface OpenStreetMapDataProps {
@@ -14,9 +25,18 @@ declare global {
   }
 
   interface PlaceChooserProps {
-    coordinates: google.maps.LatLngLiteral
+    placeCoords: google.maps.LatLngLiteral
+    canGuess: boolean
     guesses: Guess[]
-    onConfirm: (data: OSMData, distance: number) => void
+    onConfirm: (marker: google.maps.LatLngLiteral, data: OSMData, distance: number) => Promise<Guess>
+  }
+
+  interface PlaceChooserMarkerProps {
+    placeCoords: google.maps.LatLngLiteral
+    guessCoords: google.maps.LatLngLiteral
+    showInfoWindow: boolean
+    onShowInfoWindow: (show: boolean) => void
+    onConfirm: (marker: google.maps.LatLngLiteral, data: OSMData, distance: number) => void
   }
 
   //
@@ -66,6 +86,7 @@ declare global {
   interface Guess {
     id: number
     distance: number
+    coordinates: Coordinates
     hints_viewed: number
     timestamp: number
     data: OSMData
@@ -82,6 +103,7 @@ declare global {
 
   interface UserData {
     id: number
+    guess_limit: number
     data: UserLevel[]
   }
 
