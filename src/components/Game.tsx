@@ -1,10 +1,9 @@
-import React, { useState, FormEvent, useEffect, useRef } from 'react';
-import { createClient, PostgrestError } from '@supabase/supabase-js'
+import React, { useState, FormEvent, useEffect } from 'react';
+import { PostgrestError } from '@supabase/supabase-js'
 
 import Level from './Level';
 import Path from './Path';
 import Button from './Button';
-import { Link } from 'react-router-dom';
 import supabase, { LEVELS_TABLE, USER_DATA_TABLE } from '../supabase';
 
 const Game: React.FC = () => {
@@ -95,7 +94,7 @@ const Game: React.FC = () => {
               name="guess_limit"
               id="guess_limit"
               defaultValue={guessesNumber}
-              onInput={e => setGuessesNumber((e.target as any).value)}
+              onInput={e => setGuessesNumber((e.target as HTMLInputElement).value)}
               min="0"
               max="10"
             />

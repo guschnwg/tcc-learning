@@ -1,13 +1,11 @@
 import { PostgrestError } from "@supabase/supabase-js";
-import React, { FormEvent, useEffect, useState } from "react";
-import supabase from "../supabase";
+import supabase, { USER_DATA_TABLE } from "../supabase";
+import React, { FormEvent, useState } from "react";
 import Button from "./Button";
 
-const USER_DATA_TABLE = "user_data";
-
-const Leaderboard = () => {
+const Leaderboard: React.FC = () => {
   const [data, setData] = useState<LeaderboardData[]>();
-  const [error, setError] = useState<PostgrestError>();
+  const [, setError] = useState<PostgrestError>();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

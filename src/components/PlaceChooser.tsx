@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import { InfoWindow, Marker } from '@react-google-maps/api';
 import useSWR from 'swr';
 import Button from './Button';
