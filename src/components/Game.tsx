@@ -1,16 +1,16 @@
-import React, { useState, FormEvent, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PostgrestError } from '@supabase/supabase-js'
 
 import Level from './Level';
 import Path from './Path';
 import Button from './Button';
 import supabase, { LEVELS_TABLE, USER_DATA_TABLE } from '../supabase';
+import Login from './Login';
 
 const Game: React.FC = () => {
   const [data, setData] = useState<UserData>();
   const [levels, setLevels] = useState<Level[]>();
   const [error, setError] = useState<PostgrestError>();
-  const [guessesNumber, setGuessesNumber] = useState(window.localStorage.getItem("guess_limit") || "5");
 
   const fetchLevels = async () => {
     const { data, error } = await supabase.from(LEVELS_TABLE).select().order("id");
@@ -29,44 +29,6 @@ const Game: React.FC = () => {
     }
   }, [data, levels]);
 
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const user = (event.target as HTMLFormElement)["user"].value;
-    const guessLimit = Number((event.target as HTMLFormElement)["guess_limit"].value || "0");
-
-    if (!user) {
-      alert("Informe o nome do jogador")
-      return;
-    }
-
-    const { data, error } = await supabase.from(USER_DATA_TABLE).select().eq('user', user).eq('guess_limit', guessLimit);
-    if (error) {
-      setError(error);
-      return;
-    }
-    if (data && data[0]) {
-      setData(data[0]);
-      window.localStorage.setItem("user", user);
-      window.localStorage.setItem("guess_limit", guessLimit.toString());
-      return;
-    }
-
-    if (window.confirm("Criar novo jogador?")) {
-      const { data, error } = await supabase.from(USER_DATA_TABLE).insert([{ user, guess_limit: guessLimit, data: [] }]);
-
-      if (data && data[0]) {
-        setData(data[0]);
-        window.localStorage.setItem("user", user);
-        window.localStorage.setItem("guess_limit", guessLimit.toString());
-      }
-
-      if (error) {
-        setError(error);
-      }
-    }
-  }
-
   if (error) {
     return (
       <div className="login-container">
@@ -82,27 +44,7 @@ const Game: React.FC = () => {
   if (!data) {
     return (
       <div className="login-container">
-        <form onSubmit={onSubmit}>
-          <div>
-            <label htmlFor="user">Nome do Jogador</label>
-            <input name="user" id="user" defaultValue={window.localStorage.getItem("user") || ""} />
-          </div>
-          <div hidden>
-            <label htmlFor="guess_limit">Número de Palpites: {guessesNumber === "0" ? "Ilimitado" : guessesNumber}</label>
-            <input
-              type="range"
-              name="guess_limit"
-              id="guess_limit"
-              defaultValue={guessesNumber}
-              onInput={e => setGuessesNumber((e.target as HTMLInputElement).value)}
-              min="0"
-              max="10"
-            />
-          </div>
-          <div>
-            <Button>Entrar</Button>
-          </div>
-        </form>
+        <Login onLogin={setData} onError={setError} />
 
         {/* <Link to="/leaderboard">
           Leaderboard

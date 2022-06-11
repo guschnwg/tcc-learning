@@ -1,3 +1,5 @@
+import { PostgrestError } from "@supabase/supabase-js";
+
 declare global {
   interface LevelProps {
     current: Level;
@@ -37,6 +39,11 @@ declare global {
     showInfoWindow: boolean
     onShowInfoWindow: (show: boolean) => void
     onConfirm: (marker: google.maps.LatLngLiteral, data: OSMData, distance: number) => void
+  }
+
+  interface LoginProps {
+    onError: (error: PostgrestError) => void
+    onLogin: (data: UserData) => void
   }
 
   // 
