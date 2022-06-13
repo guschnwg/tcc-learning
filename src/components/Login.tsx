@@ -1,42 +1,31 @@
-import { FormEvent } from "react";
-import supabase, { LEVELS_TABLE, USER_DATA_TABLE } from '../supabase';
-import { PostgrestError } from '@supabase/supabase-js'
+import React, { FormEvent } from "react";
+import supabase from '../supabase';
 import Button from "./Button";
 
-const Login: React.FC<LoginProps> = ({ onError, onLogin }) => {
+async function loginOrRegister(email: string) {
+  const authData = { email: email, password: email };
+
+  const response = await supabase.auth.signIn(authData);
+  if (!response.error) {
+    return response;
+  }
+
+  return await supabase.auth.signUp(authData);
+}
+
+const Login: React.FC<LoginProps> = ({ onAuth }) => {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const user = (event.target as HTMLFormElement)["user"].value;
-
-    if (!user) {
+    const userName = (event.target as HTMLFormElement)["user"].value;
+    if (!userName) {
       alert("Informe o nome do jogador")
       return;
     }
 
-    const { data, error } = await supabase.from(USER_DATA_TABLE).select().eq('user', user);
-    if (error) {
-      onError(error);
-      return;
-    }
-    if (data && data[0]) {
-      onLogin(data[0]);
-      window.localStorage.setItem("user", user);
-      return;
-    }
+    const { user, session, error } = await loginOrRegister(userName + "@lalalala.com");
 
-    if (window.confirm("Criar novo jogador?")) {
-      const { data, error } = await supabase.from(USER_DATA_TABLE).insert([{ user, data: [] }]);
-
-      if (data && data[0]) {
-        onLogin(data[0]);
-        window.localStorage.setItem("user", user);
-      }
-
-      if (error) {
-        onError(error);
-      }
-    }
+    onAuth({ user, session, error });
   }
 
   return (

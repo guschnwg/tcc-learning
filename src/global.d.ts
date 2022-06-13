@@ -1,13 +1,16 @@
-import { PostgrestError } from "@supabase/supabase-js";
+import { ApiError, PostgrestError, Session, User } from "@supabase/supabase-js";
 
 declare global {
   interface LevelProps {
-    current: Level;
+    current: LevelEntity;
+    hints: HintEntity[];
     guessLimit: number
-    userData?: UserLevel;
+    startTime: number
+    guesses: GuessEntity[]
+    hintsViewed: GameLevelHintEntity[]
     onNext: () => void
     onGuess: (marker: google.maps.LatLngLiteral, data: OSMData, time: number, distance: number) => Promise<Guess>;
-    onHintViewed: (index: number, time: number) => void;
+    onHintViewed: (hint: HintEntity, time: number) => void;
     onTimePassed: (time: number) => void
   }
 
@@ -42,11 +45,32 @@ declare global {
   }
 
   interface LoginProps {
-    onError: (error: PostgrestError) => void
-    onLogin: (data: UserData) => void
+    onAuth: (auth: Auth) => void
   }
 
-  // 
+  interface GameProps {
+    auth: FulfilledAuthData
+    levels: LevelEntity[]
+  }
+
+  //
+
+  interface FulfilledAuthData {
+    user: User
+    session: Session
+    error: ApiError
+  }
+
+  interface AuthData {
+    user: User | null
+    session: Session | null
+    error: ApiError | null
+  }
+
+  interface LevelsData {
+    data: LevelEntity[] | null
+    error: PostgrestError | null
+  }
 
   interface LeaderboardData {
     user: string
@@ -96,19 +120,62 @@ declare global {
 
   //
 
+  interface GameEntity {
+    id: number
+    user_id: string
+    guess_limit: number
+    created_at: string
+  }
+
+  interface GameLevelEntity {
+    id: number
+    created_at: number
+    game_id: number
+    level_id: number
+    time_elapsed: number
+  }
+
   interface HintView {
     id: number
     viewed: boolean
     timestamp: number
   }
 
-  interface Guess {
+  interface GuessEntity {
     id: number
+    created_at: number
+    game_level_id: number
+    lat: number
+    lng: number
     distance: number
-    coordinates: Coordinates
+    time_elapsed: number
     hints_viewed: number
-    timestamp: number
     data: OSMData
+  }
+
+  interface LevelEntity {
+    id: number
+    city: City
+    lat: number
+    lng: number
+  }
+
+  interface HintEntity {
+    id: number
+    description: string
+    level_id: number
+  }
+
+  interface GameLevelHintEntity {
+    id: number
+    game_level_id: number
+    hint_id: number
+    time_elapsed: number
+  }
+
+  interface BestGuess {
+    guess: GuessEntity
+    level: LevelEntity
   }
 
   interface UserLevel {

@@ -5,7 +5,7 @@ import OpenStreetMapsData from './OpenStreetMapData';
 
 interface Props {
   markers?: LevelMarker[]
-  guesses?: Guess[]
+  guesses?: GuessEntity[]
   coordinates?: google.maps.LatLngLiteral
 }
 

@@ -82,7 +82,7 @@ const PlaceChooserMarker: React.FC<PlaceChooserMarkerProps> = ({ placeCoords, gu
   )
 }
 
-const PlaceChooserGuesses: React.FC<{ showInfoWindowId?: number, guesses: Guess[], onGuessClick: (id?: number) => void }> = ({ showInfoWindowId, guesses, onGuessClick }) => {
+const PlaceChooserGuesses: React.FC<{ showInfoWindowId?: number, guesses: GuessEntity[], onGuessClick: (id?: number) => void }> = ({ showInfoWindowId, guesses, onGuessClick }) => {
   return (
     <>
       {guesses.sort((g1, g2) => g1.distance - g2.distance).map((guess, index) => {
@@ -105,7 +105,7 @@ const PlaceChooserGuesses: React.FC<{ showInfoWindowId?: number, guesses: Guess[
           <Marker
             key={guess.id}
             zIndex={guesses.length + 1 - index}
-            position={guess.coordinates}
+            position={guess}
             icon={`https://maps.google.com/mapfiles/ms/icons/${color}.png`}
             onClick={() => onGuessClick(guess.id)}
           >
@@ -113,7 +113,7 @@ const PlaceChooserGuesses: React.FC<{ showInfoWindowId?: number, guesses: Guess[
               <InfoWindow onCloseClick={() => onGuessClick(undefined)}>
                 <OpenStreetMapsData data={guess.data}>
                   <span>Distância: {guess.distance.toFixed(2)}km</span>
-                  <span>Palpite aos {guess.timestamp}s</span>
+                  <span>Palpite aos {guess.time_elapsed}s</span>
                 </OpenStreetMapsData>
               </InfoWindow>
             )}
