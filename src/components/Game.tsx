@@ -172,10 +172,19 @@ const VeryInternalGame: React.FC<{ auth: FulfilledAuthData, level: LevelEntity, 
     return null;
   }
 
+  const handleTimePass = async (time: number) => {
+    await supabase
+      .from(GAME_LEVELS_TABLE)
+      .update({ time_elapsed: time })
+      .match({ game_id: game.id, level_id: level.id });
+  }
+
   const handleHintView = async (hint: HintEntity, time: number) => {
     const { data, error } = await supabase
       .from(GAME_LEVEL_HINTS_TABLE)
       .insert({ game_level_id: gameLevel.id, hint_id: hint.id, time_elapsed: time });
+
+    handleTimePass(time);
 
     if (data && data[0]) {
       setHintsViewed(prev => [...(prev || []), data[0]]);
@@ -195,6 +204,8 @@ const VeryInternalGame: React.FC<{ auth: FulfilledAuthData, level: LevelEntity, 
         hints_viewed: (hintsViewed || []).length
       });
 
+    handleTimePass(time);
+
     if (data && data[0]) {
       setGuesses(prev => [...(prev || []), data[0]])
       onGuess();
@@ -202,13 +213,6 @@ const VeryInternalGame: React.FC<{ auth: FulfilledAuthData, level: LevelEntity, 
     }
 
     return null;
-  }
-
-  const handleTimePass = async (time: number) => {
-    await supabase
-      .from(GAME_LEVELS_TABLE)
-      .update({ time_elapsed: time })
-      .match({ game_id: game.id, level_id: level.id });
   }
 
   return (

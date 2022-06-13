@@ -335,8 +335,7 @@ button:active {
   }
 }
 .best-guess-path-title {
-  font-size: 24px;
-  margin-bottom: 5px;
+  font-size: 12px;
 }
 
 .place-chooser-container {
@@ -365,4 +364,19 @@ button:active {
 
 .place-chooser-map-container {
   flex: 1;
+}
+
+@media screen and (max-width: 750px) {
+  .ReactModal__Content {
+    inset: 100px 60px !important;
+  }
+
+  .game-header * {
+    font-size: 20px;
+    line-height: 20px;
+  }
+
+  .stopwatch * {
+    font-size: 24px;
+  }
 }
