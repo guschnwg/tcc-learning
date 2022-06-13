@@ -45,12 +45,13 @@ declare global {
   }
 
   interface LoginProps {
-    onAuth: (auth: Auth) => void
+    onAuth: (auth: Auth, guessLimit: number) => void
   }
 
   interface GameProps {
     auth: FulfilledAuthData
     levels: LevelEntity[]
+    guessLimit: number
   }
 
   //

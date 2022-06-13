@@ -8,6 +8,7 @@ import Path from './Path';
 
 const Game: React.FC = () => {
   const [auth, setAuth] = useState<AuthData>();
+  const [guessLimit, setGuessLimit] = useState<number>();
 
   const [levels, setLevels] = useState<LevelsData>();
 
@@ -23,12 +24,17 @@ const Game: React.FC = () => {
   if (!auth) {
     return (
       <div className="login-container">
-        <Login onAuth={setAuth} />
+        <Login
+          onAuth={(auth, guessLimit) => {
+            setAuth(auth);
+            setGuessLimit(guessLimit);
+          }}
+        />
       </div>
     );
   }
 
-  if (!levels || !levels.data || !auth || !auth.user || !auth.session) {
+  if (!levels || !levels.data || !auth || !auth.user || !auth.session || !guessLimit) {
     return (
       <div className="login-container">
         <span>
@@ -38,19 +44,19 @@ const Game: React.FC = () => {
     )
   }
 
-  return <InternalGame auth={auth as FulfilledAuthData} levels={levels.data} />
+  return <InternalGame auth={auth as FulfilledAuthData} guessLimit={guessLimit} levels={levels.data} />
 }
 
-const InternalGame: React.FC<GameProps> = ({ auth, levels }) => {
+const InternalGame: React.FC<GameProps> = ({ auth, guessLimit, levels }) => {
   const [game, setGame] = useState<GameEntity>();
   const [currentLevel, setCurrentLevel] = useState(levels[0].id);
   const [bestGuesses, setBestGuesses] = useState<BestGuess[]>();
 
-  const fetchOrCreateGame = async (user: User) => {
+  const fetchOrCreateGame = async (user: User, guessLimit: number) => {
     const game = await fetchOrCreate<GameEntity>(
       GAMES_TABLE,
-      { user_id: user.id },
-      { guess_limit: 5 },
+      { user_id: user.id, guess_limit: guessLimit },
+      {},
     );
     if (game) {
       setGame(game);
@@ -75,8 +81,8 @@ const InternalGame: React.FC<GameProps> = ({ auth, levels }) => {
   }
 
   useEffect(() => {
-    if (!game) fetchOrCreateGame(auth.user);
-  }, [game, auth.user])
+    if (!game) fetchOrCreateGame(auth.user, guessLimit);
+  }, [game, guessLimit, auth.user])
 
   useEffect(() => {
     if (game && levels) fetchBestGuesses(game, levels);
