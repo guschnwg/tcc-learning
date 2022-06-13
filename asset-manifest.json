@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/tcc-learning/static/css/main.ab45b929.chunk.css",
+    "main.css": "/tcc-learning/static/css/main.e0b26e30.chunk.css",
     "main.js": "/tcc-learning/static/js/main.4c6f153c.chunk.js",
     "main.js.map": "/tcc-learning/static/js/main.4c6f153c.chunk.js.map",
     "runtime-main.js": "/tcc-learning/static/js/runtime-main.771a8d75.js",
@@ -10,7 +10,7 @@
     "static/js/3.0e778eca.chunk.js": "/tcc-learning/static/js/3.0e778eca.chunk.js",
     "static/js/3.0e778eca.chunk.js.map": "/tcc-learning/static/js/3.0e778eca.chunk.js.map",
     "index.html": "/tcc-learning/index.html",
-    "static/css/main.ab45b929.chunk.css.map": "/tcc-learning/static/css/main.ab45b929.chunk.css.map",
+    "static/css/main.e0b26e30.chunk.css.map": "/tcc-learning/static/css/main.e0b26e30.chunk.css.map",
     "static/js/2.a73199bd.chunk.js.LICENSE.txt": "/tcc-learning/static/js/2.a73199bd.chunk.js.LICENSE.txt",
     "static/js/main.4c6f153c.chunk.js.LICENSE.txt": "/tcc-learning/static/js/main.4c6f153c.chunk.js.LICENSE.txt",
     "static/media/index.css": "/tcc-learning/static/media/Nougat-ExtraBlack.5106bbca.ttf",
@@ -19,7 +19,7 @@
   "entrypoints": [
     "static/js/runtime-main.771a8d75.js",
     "static/js/2.a73199bd.chunk.js",
-    "static/css/main.ab45b929.chunk.css",
+    "static/css/main.e0b26e30.chunk.css",
     "static/js/main.4c6f153c.chunk.js"
   ]
 }
