@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import Level from './Level';
-import supabase, { fetchOrCreate, GAMES_TABLE, GAME_LEVELS_TABLE, GAME_LEVEL_HINTS_TABLE, GUESSES_TABLE, HINTS_TABLE, LEVELS_TABLE } from '../supabase';
+import supabase, { BEST_GUESSES_TABLE, fetchOrCreate, GAMES_TABLE, GAME_LEVELS_TABLE, GAME_LEVEL_HINTS_TABLE, GUESSES_TABLE, HINTS_TABLE, LEVELS_TABLE } from '../supabase';
 import Login from './Login';
 import { User } from '@supabase/supabase-js';
 import Path from './Path';
@@ -65,12 +65,10 @@ const InternalGame: React.FC<GameProps> = ({ auth, guessLimit, levels }) => {
 
   const fetchBestGuesses = async (game: GameEntity, levels: LevelEntity[]) => {
     const { data, error } = await supabase
-      .from(GUESSES_TABLE)
+      .from(BEST_GUESSES_TABLE)
       .select(`*, ${GAME_LEVELS_TABLE}!inner(*, ${LEVELS_TABLE}!inner(*))`)
       .order("distance")
       .eq(`${GAME_LEVELS_TABLE}.game_id`, game.id);
-
-    // TODO: get only best guesses per level
 
     if (data) {
       setBestGuesses(levels.map(level => ({
