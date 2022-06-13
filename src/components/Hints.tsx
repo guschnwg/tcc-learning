@@ -14,11 +14,15 @@ interface HintsProps {
 const Hints: React.FC<HintsProps> = ({ hints, hintsViewed, show, onHide, onHintView }) => {
   return (
     <Modal show={show} onHide={onHide}>
-      <ul>
+      <ul className="hints">
         {hints.map((hint) => {
           const hintView = hintsViewed.find(h => h.hint_id === hint.id);
           if (hintView) {
-            return <li key={hint.id}>{hint.description} - Visto aos {hintView.time_elapsed}s</li>;
+            return (
+              <li key={hint.id}>
+                <span>{hint.description} - Visto aos {hintView.time_elapsed}s</span>
+              </li>
+            );
           }
 
           return (

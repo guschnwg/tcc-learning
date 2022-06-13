@@ -11,7 +11,11 @@ interface Props {
   onLevelClick: (index: number) => void
 }
 
-const Levels: React.FC<Props & { style?: React.CSSProperties }> = ({ style = {}, bestGuesses, current, levels, onLevelClick }) => {
+interface LevelsProps extends Props {
+  style?: React.CSSProperties
+}
+
+const Levels: React.FC<LevelsProps> = ({ style, bestGuesses, current, levels, onLevelClick }) => {
   return (
     <>
       {levels.map(level => {
