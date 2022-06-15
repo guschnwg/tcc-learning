@@ -5,7 +5,7 @@ import StreetView from './StreetView';
 import { PlaceChooserModal } from './PlaceChooser';
 import Hints from './Hints';
 
-const Level: React.FC<LevelProps> = ({ current, hints, guessLimit, startTime, guesses, hintsViewed, onNext, onGuess, onHintViewed, onTimePassed }) => {
+const Level: React.FC<LevelProps> = ({ current, hints, guessLimit, startTime, guesses, hintsViewed, onGuess, onHintViewed, onTimePassed, onNext }) => {
   const [mapModalOpened, setMapModalOpened] = useState(false);
   const [hintsModalOpened, setHintsModalOpened] = useState(false);
   const time = useRef(0); // Not ideal, but :(
@@ -13,17 +13,13 @@ const Level: React.FC<LevelProps> = ({ current, hints, guessLimit, startTime, gu
   const canGuess = guessLimit === 0 || guesses.length < guessLimit;
 
   return (
-    <div className="game-container full">
+    <>
       <div className="game-header">
         <div>
           <Button onClick={() => setMapModalOpened((prev) => !prev)}>
             Palpitar {guesses.length}/{guessLimit === 0 ? "∞" : guessLimit}
           </Button>
-          <Button onClick={() => setHintsModalOpened((prev) => !prev)}>
-            Dicas {hintsViewed.length}/{hints.length}
-          </Button>
         </div>
-
         <div>
           <Stopwatch
             key={current.id}
@@ -32,9 +28,10 @@ const Level: React.FC<LevelProps> = ({ current, hints, guessLimit, startTime, gu
             onStep={onTimePassed}
           />
         </div>
-
         <div>
-          <Button onClick={() => onNext()}>Pular</Button>
+          <Button onClick={() => setHintsModalOpened((prev) => !prev)}>
+            Dicas {hintsViewed.length}/{hints.length}
+          </Button>
         </div>
       </div>
 
@@ -48,11 +45,12 @@ const Level: React.FC<LevelProps> = ({ current, hints, guessLimit, startTime, gu
 
       <PlaceChooserModal
         show={mapModalOpened}
-        coordinates={current}
+        level={current}
         canGuess={canGuess}
         guesses={guesses}
         onHide={() => setMapModalOpened(false)}
         onConfirm={(marker, data, distance) => onGuess(marker, data, time.current, distance)}
+        onNext={onNext}
       />
 
       <Hints
@@ -62,7 +60,7 @@ const Level: React.FC<LevelProps> = ({ current, hints, guessLimit, startTime, gu
         onHide={() => setHintsModalOpened(false)}
         onHintView={(hint: HintEntity) => onHintViewed(hint, time.current)}
       />
-    </div>
+    </>
   );
 };
 

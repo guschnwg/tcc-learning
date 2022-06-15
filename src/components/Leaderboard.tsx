@@ -1,75 +1,119 @@
-// import { PostgrestError } from "@supabase/supabase-js";
-// import supabase, { LEADERBOARD_TABLE } from "../supabase";
-// import React, { FormEvent, useState } from "react";
-// import Button from "./Button";
+import { PostgrestError } from "@supabase/supabase-js";
+import supabase, { BEST_GUESSES_TABLE, GAMES_TABLE, GAME_LEVELS_TABLE, LEVELS_TABLE, PROFILES_TABLE } from "../supabase";
+import React, { FormEvent, useEffect, useState } from "react";
+import Button from "./Button";
 
-// const Leaderboard: React.FC = () => {
-//   const [data, setData] = useState<LeaderboardData[]>();
-//   const [, setError] = useState<PostgrestError>();
+const Leaderboard: React.FC = () => {
+  const [levels, setLevels] = useState<LevelEntity[]>();
 
-//   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-//     event.preventDefault();
+  const fetchLevels = async () => {
+    const { data, error } = await supabase.from(LEVELS_TABLE).select().order("id");
+    if (data) {
+      setLevels(data);
+    }
+  }
 
-//     const guessLimit = Number((event.target as HTMLFormElement)["guess_limit"].value || "0");
+  useEffect(() => {
+    if (!levels) fetchLevels()
+  }, [levels]);
 
-//     const { data, error } = await supabase.from(LEADERBOARD_TABLE).select().eq("guess_limit", guessLimit);
+  if (!levels) {
+    return null;
+  }
 
-//     if (error) {
-//       setError(error);
-//     }
-//     if (data) {
-//       const userData = data as UserData[];
+  return <InternalLeaderboard levels={levels} />;
+}
 
-//       setData(userData.map(ud => ({
-//         user: ud.user,
-//         guesses: ud.data.map(udd => {
-//           const bestGuess = udd.guesses.sort((g1, g2) => g1.distance - g2.distance)?.[0];
+const InternalLeaderboard: React.FC<{ levels: LevelEntity[] }> = ({ levels }) => {
+  const [data, setData] = useState<LeaderboardData[]>();
+  const [, setError] = useState<PostgrestError>();
 
-//           return {
-//             id: udd.id,
-//             levelId: udd.level_id,
-//             distance: bestGuess ? bestGuess.distance : -1,
-//             hints: bestGuess.hints_viewed,
-//           }
-//         }),
-//       })));
-//     }
-//   }
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-//   return (
-//     <div style={{background: "blue"}}>
-//       <form onSubmit={handleSubmit}>
-//         <label htmlFor="guess_limit">
-//           Número de palpites
-//         </label>
-//         <select name="guess_limit" id="guess_limit" defaultValue={5}>
-//           <option value="0">Ilimitado</option>
-//           <option value="1">1</option>
-//           <option value="2">2</option>
-//           <option value="3">3</option>
-//           <option value="4">4</option>
-//           <option value="5">5</option>
-//           <option value="6">6</option>
-//           <option value="7">7</option>
-//           <option value="8">8</option>
-//           <option value="9">9</option>
-//           <option value="10">10</option>
-//         </select>
+    const guessLimit = Number((event.target as HTMLFormElement)["guess_limit"].value || "0");
+    const levelId = Number((event.target as HTMLFormElement)["level_id"].value || "0");
 
-//         <Button>Confirm</Button>
-//       </form>
+    const { data, error } = await supabase
+      .from(BEST_GUESSES_TABLE)
+      .select(`*, ${GAME_LEVELS_TABLE}!inner(*, ${GAMES_TABLE}!inner(*, ${PROFILES_TABLE}!inner(*)))`)
+      .eq(`${GAME_LEVELS_TABLE}.${GAMES_TABLE}.guess_limit`, guessLimit)
+      .eq(`${GAME_LEVELS_TABLE}.level_id`, levelId)
+      .order('distance')
+      .limit(20);
 
-//       <div>
-//         <ul>
-//           {data?.map(d => (
-//             <li key={d.user}>{d.user} {d.guesses.reduce((agg, crr) => agg + crr.distance + crr.hints * 100, 0)}</li>
-//           ))}
-//         </ul>
-//       </div>
-//     </div>
-//   );
-// }
+    if (error) {
+      setError(error);
+    }
+    if (data) {
+      setData(data);
+    }
+  }
 
-// export default Leaderboard;
+  return (
+    <div className="leaderboard">
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="level_id">
+            Nível
+          </label>
+          <select name="level_id" id="level_id" defaultValue={0}>
+            {levels.map(level => <option key={level.id} value={level.id}>{level.id}</option>)}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="guess_limit">
+            Número de palpites
+          </label>
+          <select name="guess_limit" id="guess_limit" defaultValue={5}>
+            <option value="0">Ilimitado</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
 
-export default function Leaderboard(): null { return null; }
+        <div>
+          <Button>Confirm</Button>
+        </div>
+      </form>
+
+      {data && (
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Distância</th>
+                <th>Tempo</th>
+                <th>Dicas Usadas</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {data.map((d, index) => (
+                <tr key={d.game_levels.games.profiles.name}>
+                  <td>{index + 1}</td>
+                  <td>{d.game_levels.games.profiles.name}</td>
+                  <td>{d.distance.toFixed(2)}</td>
+                  <td>{d.time_elapsed}</td>
+                  <td>{d.hints_viewed}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Leaderboard;

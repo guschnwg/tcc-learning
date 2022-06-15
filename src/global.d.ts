@@ -8,19 +8,20 @@ declare global {
     startTime: number
     guesses: GuessEntity[]
     hintsViewed: GameLevelHintEntity[]
-    onNext: () => void
     onGuess: (marker: google.maps.LatLngLiteral, data: OSMData, time: number, distance: number) => Promise<Guess>;
     onHintViewed: (hint: HintEntity, time: number) => void;
     onTimePassed: (time: number) => void
+    onNext: () => void
   }
 
   interface PlaceChooserModalProps {
     show: boolean
     canGuess: boolean
-    coordinates: google.maps.LatLngLiteral
+    level: LevelEntity
     guesses: Guess[]
     onHide: () => void
     onConfirm: (marker: google.maps.LatLngLiteral, data: OSMData, distance: number) => Promise<Guess>
+    onNext: () => void
   }
 
   interface OpenStreetMapDataProps {
@@ -30,10 +31,11 @@ declare global {
   }
 
   interface PlaceChooserProps {
-    placeCoords: google.maps.LatLngLiteral
+    level: LevelEntity
     canGuess: boolean
     guesses: Guess[]
     onConfirm: (marker: google.maps.LatLngLiteral, data: OSMData, distance: number) => Promise<Guess>
+    onNext: () => void
   }
 
   interface PlaceChooserMarkerProps {
@@ -74,13 +76,16 @@ declare global {
   }
 
   interface LeaderboardData {
-    user: string
-    guesses: {
-      id: number
-      levelId: number
-      distance: number
-      hints: number
-    }[]
+    game_levels: {
+      games: {
+        profiles: {
+          name: string
+        }
+      }
+    }
+    time_elapsed: number
+    distance: number
+    hints_viewed: number
   }
 
   //
@@ -92,7 +97,11 @@ declare global {
     municipality?: string
     neighbourhood?: string
     suburb?: string
+    district?: string
+    borough?: string
+    subdivision?: string
     county?: string
+    state_district?: string
     village?: string
     region?: string
     state: string
@@ -159,6 +168,7 @@ declare global {
     city: City
     lat: number
     lng: number
+    data: OSMData
   }
 
   interface HintEntity {

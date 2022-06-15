@@ -8,8 +8,8 @@ export const GAMES_TABLE = "games";
 export const GAME_LEVELS_TABLE = "game_levels";
 export const GAME_LEVEL_HINTS_TABLE = "game_level_hints";
 export const LEVELS_TABLE = "levels";
+export const PROFILES_TABLE = "profiles";
 export const HINTS_TABLE = "hints";
-export const LEADERBOARD_TABLE = "leaderboard";
 
 export async function fetchOrCreate<T>(table: string, match: Record<string, unknown>, insert: Record<string, unknown>): Promise<T | null> {
   let response = await supabase

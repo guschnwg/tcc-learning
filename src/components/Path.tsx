@@ -18,17 +18,17 @@ interface LevelsProps extends Props {
 const Levels: React.FC<LevelsProps> = ({ style, bestGuesses, current, levels, onLevelClick }) => {
   return (
     <>
-      {levels.map(level => {
+      {levels.map((level, index) => {
         const bestGuess = bestGuesses.find(g => g.level.id === level.id);
 
         return (
           <Button
             key={level.id}
-            className={`path-content-level full ${current === level.id ? "current" : ""}`}
-            onClick={() => onLevelClick(level.id)}
+            className={`path-content-level full ${current === index ? "current" : ""}`}
+            onClick={() => onLevelClick(index)}
             style={style}
           >
-            <span className={`level-number ${!bestGuess || !bestGuess.guess ? "never-tried" : ""}`}>{level.id}</span>
+            <span className={`level-number ${!bestGuess || !bestGuess.guess ? "never-tried" : ""}`}>{index + 1}</span>
 
             {bestGuess && bestGuess.guess && (
               <div className="best-guess-path">
@@ -62,7 +62,7 @@ const Path: React.FC<Props> = ({ levels, bestGuesses, current, onLevelClick }) =
   }
 
   return (
-    <div className="path-container shown">
+    <>
       <Button onClick={() => setShow(prev => !prev)}>
         Níveis
       </Button>
@@ -87,7 +87,7 @@ const Path: React.FC<Props> = ({ levels, bestGuesses, current, onLevelClick }) =
 
         <div>Mais por vir...</div>
       </Modal>
-    </div>
+    </>
   )
 }
 

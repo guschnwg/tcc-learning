@@ -5,6 +5,9 @@ import supabase, { BEST_GUESSES_TABLE, fetchOrCreate, GAMES_TABLE, GAME_LEVELS_T
 import Login from './Login';
 import { User } from '@supabase/supabase-js';
 import Path from './Path';
+import Button from './Button';
+import { fisherYates } from '../utils';
+import Settings from './Settings';
 
 const Game: React.FC = () => {
   const [auth, setAuth] = useState<AuthData>();
@@ -14,6 +17,7 @@ const Game: React.FC = () => {
 
   const fetchLevels = async () => {
     const { data, error } = await supabase.from(LEVELS_TABLE).select().order("id");
+    if (data) fisherYates(data);
     setLevels({ data, error });
   }
 
@@ -49,7 +53,7 @@ const Game: React.FC = () => {
 
 const InternalGame: React.FC<GameProps> = ({ auth, guessLimit, levels }) => {
   const [game, setGame] = useState<GameEntity>();
-  const [currentLevel, setCurrentLevel] = useState(levels[0].id);
+  const [currentLevel, setCurrentLevel] = useState(0);
   const [bestGuesses, setBestGuesses] = useState<BestGuess[]>();
 
   const fetchOrCreateGame = async (user: User, guessLimit: number) => {
@@ -90,33 +94,46 @@ const InternalGame: React.FC<GameProps> = ({ auth, guessLimit, levels }) => {
     return null;
   }
 
-  const level = levels.find(l => l.id === currentLevel);
+  const level = levels[currentLevel];
   if (!level) {
     return <span>Nenhum nível aqui!</span>;
   }
 
   return (
-    <div className="full">
+    <div className="game-container full">
       <VeryInternalGame
         key={currentLevel}
         auth={auth}
         level={level}
         game={game}
         onGuess={() => fetchBestGuesses(game, levels)}
-        onLevelChange={setCurrentLevel}
+        onNext={() => setCurrentLevel(prev => prev + 1)}
       />
 
-      <Path
-        levels={levels}
-        bestGuesses={bestGuesses || []}
-        current={currentLevel}
-        onLevelClick={setCurrentLevel}
-      />
+      <div className="game-footer">
+        <div>
+          <Settings />
+        </div>
+
+        <div>
+          <Path
+            levels={levels}
+            bestGuesses={bestGuesses || []}
+            current={currentLevel}
+            onLevelClick={setCurrentLevel}
+          />
+
+          <Button onClick={() => setCurrentLevel(prev => prev + 1)}>
+            Pular
+          </Button>
+        </div>
+      </div>
+
     </div>
   );
 }
 
-const VeryInternalGame: React.FC<{ auth: FulfilledAuthData, level: LevelEntity, game: GameEntity, onGuess: () => void, onLevelChange: (index: number) => void }> = ({ auth, game, level, onGuess, onLevelChange }) => {
+const VeryInternalGame: React.FC<{ auth: FulfilledAuthData, level: LevelEntity, game: GameEntity, onGuess: () => void, onNext: () => void }> = ({ auth, game, level, onGuess, onNext }) => {
   const [gameLevel, setGameLevel] = useState<GameLevelEntity>();
   const [guesses, setGuesses] = useState<GuessEntity[]>();
   const [hints, setHints] = useState<HintEntity[]>();
@@ -227,7 +244,7 @@ const VeryInternalGame: React.FC<{ auth: FulfilledAuthData, level: LevelEntity, 
       startTime={gameLevel.time_elapsed}
       guesses={guesses || []}
       hintsViewed={hintsViewed || []}
-      onNext={() => onLevelChange(level.id + 1)}
+      onNext={onNext}
       onGuess={handleGuess}
       onHintViewed={handleHintView}
       onTimePassed={handleTimePass}

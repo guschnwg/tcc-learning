@@ -5,21 +5,11 @@ import Button from './Button';
 
 import Map, { DEFAULT_COORDINATES, DEFAULT_ZOOM, getZoom } from './Map';
 import Modal from './Modal';
-import OpenStreetMapsData from './OpenStreetMapData';
+import OpenStreetMapsData, { isSameOSMPlace } from './OpenStreetMapData';
 import Spinner from './Spinner';
+import { haversineDistance } from '../utils';
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
-
-const haversineDistance = (mk1: google.maps.LatLngLiteral, mk2: google.maps.LatLngLiteral) => {
-  const R = 3958.8; // Radius of the Earth in miles
-  const rlat1 = mk1.lat * (Math.PI / 180); // Convert degrees to radians
-  const rlat2 = mk2.lat * (Math.PI / 180); // Convert degrees to radians
-  const difflat = rlat2 - rlat1; // Radian difference (latitudes)
-  const difflon = (mk2.lng - mk1.lng) * (Math.PI / 180); // Radian difference (longitudes)
-
-  const d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
-  return d;
-}
 
 const Data: React.FC<{ position: google.maps.LatLngLiteral, showConfirmButton: boolean, onConfirm?: (data: OSMData) => void }> = ({ position, showConfirmButton, onConfirm, children }) => {
   const { data } = useSWR(
@@ -42,6 +32,34 @@ const Data: React.FC<{ position: google.maps.LatLngLiteral, showConfirmButton: b
     </>
   );
 };
+
+const GuessInfo: React.FC<{ guess: GuessEntity, level: LevelEntity, onClose: () => void, onNext: () => void }> = ({ level, guess, onClose, onNext }) => {
+  return (
+    <Modal className="guess-info-modal" portalClassName="guess-info-modal-container" show onHide={onClose}>
+      <h3>Seu palpite</h3>
+
+      <OpenStreetMapsData data={guess.data}>
+        <span>Distância: {guess.distance.toFixed(2)}km</span>
+
+        <div className="guess-info-modal-actions">
+          {isSameOSMPlace(level.data.address, guess.data.address) ? (
+            <>
+              <h4>Você acertou a cidade!</h4>
+
+              <Button onClick={onNext}>
+                Próximo
+              </Button>
+            </>
+          ) : (
+            <Button onClick={onClose}>
+              Tentar novamente
+            </Button>
+          )}
+        </div>
+      </OpenStreetMapsData>
+    </Modal>
+  )
+}
 
 const PlaceChooserMarker: React.FC<PlaceChooserMarkerProps> = ({ placeCoords, guessCoords, showInfoWindow, onShowInfoWindow, onConfirm }) => {
   const [showDistance, setShowDistance] = useState(false);
@@ -82,23 +100,28 @@ const PlaceChooserMarker: React.FC<PlaceChooserMarkerProps> = ({ placeCoords, gu
   )
 }
 
-const PlaceChooserGuesses: React.FC<{ showInfoWindowId?: number, guesses: GuessEntity[], onGuessClick: (id?: number) => void }> = ({ showInfoWindowId, guesses, onGuessClick }) => {
+const PlaceChooserGuesses: React.FC<{ showInfoWindowId?: number, level: LevelEntity, guesses: GuessEntity[], onGuessClick: (id?: number) => void }> = ({ showInfoWindowId, level, guesses, onGuessClick }) => {
   return (
     <>
       {guesses.sort((g1, g2) => g1.distance - g2.distance).map((guess, index) => {
         let color = "red";
-        if (guess.distance < 30) {
-          color = "blue";
-        } else if (guess.distance < 100) {
-          color = "green";
-        } else if (guess.distance < 300) {
-          color = "yellow";
-        } else if (guess.distance < 1000) {
-          color = "orange";
-        }
 
-        if (index === 0) {
-          color += "-dot";
+        if (isSameOSMPlace(guess.data.address, level.data.address)) {
+          color = "sunny";
+        } else {
+          if (guess.distance < 30) {
+            color = "blue";
+          } else if (guess.distance < 100) {
+            color = "green";
+          } else if (guess.distance < 300) {
+            color = "yellow";
+          } else if (guess.distance < 1000) {
+            color = "orange";
+          }
+
+          if (index === 0) {
+            color += "-dot";
+          }
         }
 
         return (
@@ -106,7 +129,7 @@ const PlaceChooserGuesses: React.FC<{ showInfoWindowId?: number, guesses: GuessE
             key={guess.id}
             zIndex={guesses.length + 1 - index}
             position={guess}
-            icon={`https://maps.google.com/mapfiles/ms/icons/${color}.png`}
+            icon={`https://maps.google.com/mapfiles/ms/micons/${color}.png`}
             onClick={() => onGuessClick(guess.id)}
           >
             {showInfoWindowId === guess.id && (
@@ -124,11 +147,12 @@ const PlaceChooserGuesses: React.FC<{ showInfoWindowId?: number, guesses: GuessE
   )
 }
 
-const PlaceChooser: React.FC<PlaceChooserProps> = ({ placeCoords, canGuess, guesses, onConfirm }) => {
+const PlaceChooser: React.FC<PlaceChooserProps> = ({ level, canGuess, guesses, onConfirm, onNext }) => {
   const [mapCenter, setMapCenter] = useState(DEFAULT_COORDINATES);
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
   const [guessCoords, setGuessCoords] = useState<google.maps.LatLngLiteral>();
   const [showInfoWindowId, setShowInfoWindowId] = useState<number>();
+  const [guessInfo, setGuessInfo] = useState<GuessEntity>();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -178,21 +202,32 @@ const PlaceChooser: React.FC<PlaceChooserProps> = ({ placeCoords, canGuess, gues
         >
           <PlaceChooserGuesses
             showInfoWindowId={showInfoWindowId}
+            level={level}
             guesses={guesses}
             onGuessClick={setShowInfoWindowId}
           />
 
           {guessCoords && (
             <PlaceChooserMarker
-              placeCoords={placeCoords}
+              placeCoords={level}
               showInfoWindow={showInfoWindowId === -1}
               guessCoords={guessCoords}
               onShowInfoWindow={show => setShowInfoWindowId(show ? -1 : undefined)}
               onConfirm={async (marker: google.maps.LatLngLiteral, data: OSMData, distance: number) => {
+                setShowInfoWindowId(undefined);
                 const guess = await onConfirm(marker, data, distance);
-                setShowInfoWindowId(guess.id);
+                setGuessInfo(guess);
                 setGuessCoords(undefined);
               }}
+            />
+          )}
+
+          {guessInfo && (
+            <GuessInfo
+              level={level}
+              guess={guessInfo}
+              onClose={() => setGuessInfo(undefined)}
+              onNext={onNext}
             />
           )}
         </Map>
@@ -201,10 +236,10 @@ const PlaceChooser: React.FC<PlaceChooserProps> = ({ placeCoords, canGuess, gues
   )
 }
 
-export const PlaceChooserModal: React.FC<PlaceChooserModalProps> = ({ show, canGuess, coordinates, guesses, onHide, onConfirm }) => {
+export const PlaceChooserModal: React.FC<PlaceChooserModalProps> = ({ show, canGuess, level, guesses, onHide, onConfirm, onNext }) => {
   return (
     <Modal show={show} onHide={onHide}>
-      <PlaceChooser placeCoords={coordinates} canGuess={canGuess} guesses={guesses} onConfirm={onConfirm} />
+      <PlaceChooser level={level} canGuess={canGuess} guesses={guesses} onConfirm={onConfirm} onNext={onNext} />
     </Modal>
   );
 };

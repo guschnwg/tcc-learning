@@ -60,13 +60,11 @@ button:active {
 }
 
 .game-container {
-  background: #323dbb;
-
   display: flex;
   flex-direction: column;
 }
 
-.game-header {
+.game-header, .game-footer {
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -74,6 +72,7 @@ button:active {
 
 .game-body {
   margin: 20px;
+  margin-bottom: 0;
   margin-top: 0;
   box-sizing: border-box;
 
@@ -288,7 +287,6 @@ button:active {
   justify-content: center;
   align-items: center;
   height: 100%;
-  background: #323dbb;
 }
 .login-container > span {
   color: white;
@@ -397,4 +395,97 @@ button:active {
 
 .hints > li > span {
   margin-left: 10px;
+}
+
+.leaderboard form {
+  display: flex;
+  padding: 20px;
+}
+.leaderboard form > div {
+  margin-right: 15px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.leaderboard form > div > label {
+  color: white;
+  text-align: left;
+}
+.leaderboard form > div > select {
+  font-size: 24px;
+  padding: 10px;
+  color: #232b82;
+  border-radius: 5px;
+  border: #232b82 5px solid;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.leaderboard form > div > button {
+  margin-top: 20px;
+  height: 53.5px;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid white;
+  text-align: left;
+  padding: 8px;
+  color: white;
+  text-align: center;
+}
+
+th {
+  font-style: italic;
+}
+
+tr:nth-child(even) {
+  background-color: #273096;
+}
+
+.guess-info-modal-container .ReactModal__Overlay.ReactModal__Overlay--after-open {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.guess-info-modal {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.guess-info-modal h3 {
+  margin-top: 0;
+  padding: 0 5px;
+}
+
+.guess-info-modal .data-container {
+  color: white;
+  box-sizing: border-box;
+  flex: 1;
+}
+
+.guess-info-modal .data-container .guess-info-modal-actions {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: flex-end;
+  align-items: stretch;
+  width: 100%;
+}
+
+.guess-info-modal .data-container .guess-info-modal-actions h4 {
+  margin: 0;
+}
+
+.guess-info-modal .data-container .guess-info-modal-actions > button {
+  margin: 0;
+  margin-top: 10px;
 }
