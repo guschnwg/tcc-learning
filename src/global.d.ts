@@ -79,6 +79,7 @@ declare global {
     game_levels: {
       games: {
         profiles: {
+          id: string
           name: string
         }
       }
@@ -86,6 +87,19 @@ declare global {
     time_elapsed: number
     distance: number
     hints_viewed: number
+  }
+
+  interface GeneralLeaderboardData {
+    user: {
+      id: string
+      name: string
+    }
+    guesses: LeaderboardData[]
+    totalGuesses: number
+    totalDistance: number
+    totalTime: number
+    averageDistance: number
+    averageTime: number
   }
 
   //
