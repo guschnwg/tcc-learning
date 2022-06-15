@@ -8,6 +8,7 @@ import Path from './Path';
 import Button from './Button';
 import { fisherYates } from '../utils';
 import Settings from './Settings';
+import { Link } from 'react-router-dom';
 
 const Game: React.FC = () => {
   const [auth, setAuth] = useState<AuthData>();
@@ -34,6 +35,10 @@ const Game: React.FC = () => {
             setGuessLimit(guessLimit);
           }}
         />
+
+        <Link to="/leaderboard" className="leaderboard-link">
+          leaderboard
+        </Link>
       </div>
     );
   }

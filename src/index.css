@@ -489,3 +489,8 @@ tr:nth-child(even) {
   margin: 0;
   margin-top: 10px;
 }
+
+.leaderboard-link {
+  margin-top: 20px;
+  color: white;
+}
