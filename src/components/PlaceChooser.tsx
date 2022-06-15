@@ -33,7 +33,36 @@ const Data: React.FC<{ position: google.maps.LatLngLiteral, showConfirmButton: b
   );
 };
 
-const GuessInfo: React.FC<{ guess: GuessEntity, level: LevelEntity, onClose: () => void, onNext: () => void }> = ({ level, guess, onClose, onNext }) => {
+const GuessInfo: React.FC<{ canGuess: boolean, guess: GuessEntity, level: LevelEntity, onClose: () => void, onNext: () => void }> = ({ canGuess, level, guess, onClose, onNext }) => {
+  let action = null;
+  if (isSameOSMPlace(level.data.address, guess.data.address)) {
+    action = (
+      <>
+        <h4>Você acertou a cidade!</h4>
+
+        <Button onClick={onNext}>
+          Próximo
+        </Button>
+      </>
+    );
+  } else if (canGuess) {
+    action = (
+      <Button onClick={onClose}>
+        Tentar novamente
+      </Button>
+    );
+  } else {
+    action = (
+      <>
+        <h4>Nenhuma tentativa restante</h4>
+
+        <Button onClick={onNext}>
+          Próximo
+        </Button>
+      </>
+    )
+  }
+
   return (
     <Modal className="guess-info-modal" portalClassName="guess-info-modal-container" show onHide={onClose}>
       <h3>Seu palpite</h3>
@@ -41,21 +70,7 @@ const GuessInfo: React.FC<{ guess: GuessEntity, level: LevelEntity, onClose: () 
       <OpenStreetMapsData data={guess.data}>
         <span>Distância: {guess.distance.toFixed(2)}km</span>
 
-        <div className="guess-info-modal-actions">
-          {isSameOSMPlace(level.data.address, guess.data.address) ? (
-            <>
-              <h4>Você acertou a cidade!</h4>
-
-              <Button onClick={onNext}>
-                Próximo
-              </Button>
-            </>
-          ) : (
-            <Button onClick={onClose}>
-              Tentar novamente
-            </Button>
-          )}
-        </div>
+        {action && <div className="guess-info-modal-actions">{action}</div>}
       </OpenStreetMapsData>
     </Modal>
   )
@@ -224,6 +239,7 @@ const PlaceChooser: React.FC<PlaceChooserProps> = ({ level, canGuess, guesses, o
 
           {guessInfo && (
             <GuessInfo
+              canGuess={canGuess}
               level={level}
               guess={guessInfo}
               onClose={() => setGuessInfo(undefined)}
