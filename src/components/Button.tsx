@@ -8,11 +8,8 @@ click.load();
 
 const Button: React.FC<Props> = ({ children, ...props}) => {
     const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-        click.play();   
-
-        if (props.onClick) {
-            props.onClick(event);
-        }
+        if (window.localStorage.getItem("mute") !== "true") click.play();
+        if (props.onClick) props.onClick(event)
     }
 
     return (

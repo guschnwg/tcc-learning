@@ -21,7 +21,7 @@ code {
 }
 
 button {
-  background: #323dbb;
+  background: #c5a530;
   border: 2px solid white;
   box-shadow: 0 4px white;
   color: white;
@@ -56,7 +56,8 @@ button:active {
 }
 
 .full-width {
-  height: 100%;
+  width: 100%;
+  margin: 0;
 }
 
 .game-container {
@@ -241,6 +242,7 @@ button:active {
   border-top: 5px solid white;
 }
 .path-content-level {
+  background: #323dbb;
   display: inline-flex !important;
   flex-direction: column;
   align-items: center;
@@ -493,4 +495,19 @@ tr:nth-child(even) {
 .leaderboard-link {
   margin-top: 20px;
   color: white;
+}
+
+.place-chooser-tutorial {
+  inset: 150px !important;
+  position: absolute;
+}
+
+.place-chooser-tutorial > div {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.place-chooser-tutorial > div > h4 {
+  margin: 10px 0 10px 10px;
 }

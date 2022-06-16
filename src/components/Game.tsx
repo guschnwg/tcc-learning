@@ -9,6 +9,7 @@ import Button from './Button';
 import { fisherYates } from '../utils';
 import Settings from './Settings';
 import { Link } from 'react-router-dom';
+import Tutorial from './Tutorial';
 
 const Game: React.FC = () => {
   const [auth, setAuth] = useState<AuthData>();
@@ -18,7 +19,7 @@ const Game: React.FC = () => {
 
   const fetchLevels = async () => {
     const { data, error } = await supabase.from(LEVELS_TABLE).select().order("id");
-    if (data) fisherYates(data);
+    // if (data) fisherYates(data);
     setLevels({ data, error });
   }
 
@@ -30,8 +31,8 @@ const Game: React.FC = () => {
     return (
       <div className="login-container">
         <Login
-          onAuth={(auth, guessLimit) => {
-            setAuth(auth);
+          onAuth={(auth, guessLimit, isNew) => {
+            setAuth({ ...auth, isNew });
             setGuessLimit(guessLimit);
           }}
         />
@@ -118,6 +119,8 @@ const InternalGame: React.FC<GameProps> = ({ auth, guessLimit, levels }) => {
       <div className="game-footer">
         <div>
           <Settings />
+
+          <Tutorial guessLimit={game.guess_limit} show={auth.isNew} />
         </div>
 
         <div>

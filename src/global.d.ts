@@ -47,7 +47,7 @@ declare global {
   }
 
   interface LoginProps {
-    onAuth: (auth: Auth, guessLimit: number) => void
+    onAuth: (auth: Auth, guessLimit: number, isNew: boolean) => void
   }
 
   interface GameProps {
@@ -62,12 +62,14 @@ declare global {
     user: User
     session: Session
     error: ApiError
+    isNew: boolean
   }
 
   interface AuthData {
     user: User | null
     session: Session | null
     error: ApiError | null
+    isNew: boolean
   }
 
   interface LevelsData {
@@ -83,7 +85,9 @@ declare global {
           name: string
         }
       }
+      levels: LevelEntity
     }
+    data: OSMData
     time_elapsed: number
     distance: number
     hints_viewed: number
@@ -96,6 +100,7 @@ declare global {
     }
     guesses: LeaderboardData[]
     totalGuesses: number
+    correctGuesses: number
     totalDistance: number
     totalTime: number
     averageDistance: number

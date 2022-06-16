@@ -2,6 +2,7 @@ import { PostgrestError } from "@supabase/supabase-js";
 import supabase, { BEST_GUESSES_TABLE, GAMES_TABLE, GAME_LEVELS_TABLE, LEVELS_TABLE, PROFILES_TABLE } from "../supabase";
 import React, { FormEvent, useEffect, useState } from "react";
 import Button from "./Button";
+import { isSameOSMPlace } from "./OpenStreetMapData";
 
 const Leaderboard: React.FC = () => {
   const [levels, setLevels] = useState<LevelEntity[]>();
@@ -27,7 +28,7 @@ const Leaderboard: React.FC = () => {
 const fetchLeaderboard = async (guessLimit = 5, levelId = 0): Promise<{ data: LeaderboardData[] | null, error: PostgrestError | null }> => {
   let query = supabase
     .from(BEST_GUESSES_TABLE)
-    .select(`*, ${GAME_LEVELS_TABLE}!inner(*, ${GAMES_TABLE}!inner(*, ${PROFILES_TABLE}!inner(*)))`)
+    .select(`*, ${GAME_LEVELS_TABLE}!inner(*, ${LEVELS_TABLE}!inner(*), ${GAMES_TABLE}!inner(*, ${PROFILES_TABLE}!inner(*)))`)
     .eq(`${GAME_LEVELS_TABLE}.${GAMES_TABLE}.guess_limit`, guessLimit);
 
   if (levelId !== 0) {
@@ -68,6 +69,7 @@ const LevelLeaderboard: React.FC<{ guessLimit: number, levelId: number  }> = ({ 
             <th>#</th>
             <th>Nome</th>
             <th>Distância</th>
+            <th>Acertou?</th>
             <th>Tempo</th>
             <th>Dicas Usadas</th>
           </tr>
@@ -78,7 +80,8 @@ const LevelLeaderboard: React.FC<{ guessLimit: number, levelId: number  }> = ({ 
             <tr key={d.game_levels.games.profiles.name}>
               <td>{index + 1}</td>
               <td>{d.game_levels.games.profiles.name}</td>
-              <td>{d.distance.toFixed(2)}</td>
+              <td>{(d.distance / 1000).toFixed(2)}</td>
+              <td>{isSameOSMPlace(d.data.address, d.game_levels.levels.data.address) ? "SIM" : "NÃO"}</td>
               <td>{d.time_elapsed}</td>
               <td>{d.hints_viewed}</td>
             </tr>
@@ -111,22 +114,24 @@ const GeneralLeaderboard: React.FC<{ guessLimit: number }> = ({ guessLimit }) =>
               totalDistance: 0,
               averageDistance: 0,
               averageTime: 0,
+              correctGuesses: 0,
             })
           } else {
             userGeneralData.guesses.push(guess);
           }
         }
 
-        for (const data of generalData) {
-          data.totalGuesses = data.guesses.length;
-          data.totalDistance = data.guesses.reduce((agg, crr) => agg + crr.distance, 0);
-          data.totalTime = data.guesses.reduce((agg, crr) => agg + crr.time_elapsed, 0);
-          data.averageDistance = data.totalDistance / data.totalGuesses;
-          data.averageTime = data.totalTime / data.totalGuesses;
+        for (const item of generalData) {
+          item.totalGuesses = item.guesses.length;
+          item.correctGuesses = item.guesses.reduce((agg, crr) => agg + Number(isSameOSMPlace(crr.data.address, crr.game_levels.levels.data.address)), 0);
+          item.totalDistance = item.guesses.reduce((agg, crr) => agg + (crr.distance / 1000), 0);
+          item.totalTime = item.guesses.reduce((agg, crr) => agg + crr.time_elapsed, 0);
+          item.averageDistance = item.totalDistance / item.totalGuesses;
+          item.averageTime = item.totalTime / item.totalGuesses;
         }
 
-        // Sort by averageDistance, then by Average Time
-        setData(generalData.sort((a, b) => a.averageDistance - b.averageDistance || a.averageTime - b.averageTime));
+        // Sort by correctGuesses, then by averageDistance, then by Average Time
+        setData(generalData.sort((a, b) => a.totalGuesses - b.totalGuesses || a.correctGuesses - b.correctGuesses || a.averageDistance - b.averageDistance || a.averageTime - b.averageTime));
       }
       if (error) {
         setError(error);
@@ -147,6 +152,7 @@ const GeneralLeaderboard: React.FC<{ guessLimit: number }> = ({ guessLimit }) =>
             <th>#</th>
             <th>Nome</th>
             <th>Palpites Totais</th>
+            <th>Palpites Acertados</th>
             <th>Distância Total</th>
             <th>Tempo Total</th>
             <th>Distância Média</th>
@@ -160,6 +166,7 @@ const GeneralLeaderboard: React.FC<{ guessLimit: number }> = ({ guessLimit }) =>
               <td>{index + 1}</td>
               <td>{d.user.name}</td>
               <td>{d.totalGuesses}</td>
+              <td>{d.correctGuesses}</td>
               <td>{d.totalDistance.toFixed(2)}</td>
               <td>{d.totalTime}s</td>
               <td>{d.averageDistance.toFixed(2)}</td>
@@ -215,7 +222,7 @@ const InternalLeaderboard: React.FC<{ levels: LevelEntity[] }> = ({ levels }) =>
         </div>
 
         <div>
-          <Button>Confirm</Button>
+          <Button>Confirmar</Button>
         </div>
       </form>
 

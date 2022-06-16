@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
-import { InfoWindow, Marker } from '@react-google-maps/api';
+import { Circle, InfoWindow, Marker } from '@react-google-maps/api';
 import useSWR from 'swr';
 import Button from './Button';
 
@@ -7,7 +7,8 @@ import Map, { DEFAULT_COORDINATES, DEFAULT_ZOOM, getZoom } from './Map';
 import Modal from './Modal';
 import OpenStreetMapsData, { isSameOSMPlace } from './OpenStreetMapData';
 import Spinner from './Spinner';
-import { haversineDistance } from '../utils';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestion } from '@fortawesome/free-solid-svg-icons'
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -68,7 +69,7 @@ const GuessInfo: React.FC<{ canGuess: boolean, guess: GuessEntity, level: LevelE
       <h3>Seu palpite</h3>
 
       <OpenStreetMapsData data={guess.data}>
-        <span>Distância: {guess.distance.toFixed(2)}km</span>
+        <span>Distância: {(guess.distance / 1000).toFixed(2)}km</span>
 
         {action && <div className="guess-info-modal-actions">{action}</div>}
       </OpenStreetMapsData>
@@ -80,7 +81,10 @@ const PlaceChooserMarker: React.FC<PlaceChooserMarkerProps> = ({ placeCoords, gu
   const [showDistance, setShowDistance] = useState(false);
   const [ready, setReady] = useState(false);
   const distance = useMemo(() => {
-    return haversineDistance(guessCoords, placeCoords);
+    return window.google.maps.geometry.spherical.computeDistanceBetween(
+      new google.maps.LatLng(guessCoords),
+      new google.maps.LatLng(placeCoords)
+    );
   }, [guessCoords, placeCoords]);
 
   useEffect(() => {
@@ -105,7 +109,7 @@ const PlaceChooserMarker: React.FC<PlaceChooserMarkerProps> = ({ placeCoords, gu
           <React.Suspense fallback={<Spinner color="#323dbb" />}>
             <Data position={guessCoords} showConfirmButton={!showDistance} onConfirm={handleConfirm}>
               {showDistance && (
-                <span>Distância: {distance.toFixed(2)}km</span>
+                <span>Distância: {(distance / 1000).toFixed(2)}km</span>
               )}
             </Data>
           </React.Suspense>
@@ -124,13 +128,13 @@ const PlaceChooserGuesses: React.FC<{ showInfoWindowId?: number, level: LevelEnt
         if (isSameOSMPlace(guess.data.address, level.data.address)) {
           color = "sunny";
         } else {
-          if (guess.distance < 30) {
+          if (guess.distance < 30 * 1000) {
             color = "blue";
-          } else if (guess.distance < 100) {
+          } else if (guess.distance < 100 * 1000) {
             color = "green";
-          } else if (guess.distance < 300) {
+          } else if (guess.distance < 300 * 1000) {
             color = "yellow";
-          } else if (guess.distance < 1000) {
+          } else if (guess.distance < 1000 * 1000) {
             color = "orange";
           }
 
@@ -150,16 +154,60 @@ const PlaceChooserGuesses: React.FC<{ showInfoWindowId?: number, level: LevelEnt
             {showInfoWindowId === guess.id && (
               <InfoWindow onCloseClick={() => onGuessClick(undefined)}>
                 <OpenStreetMapsData data={guess.data}>
-                  <span>Distância: {guess.distance.toFixed(2)}km</span>
+                  <span>Distância: {(guess.distance / 1000).toFixed(2)}km</span>
                   <span>Palpite aos {guess.time_elapsed}s</span>
                 </OpenStreetMapsData>
               </InfoWindow>
             )}
+
+            {showInfoWindowId === guess.id && (
+              <Circle
+                center={guess}
+                radius={guess.distance}
+                options={{ strokeWeight: 1 }}
+              />
+            )}
           </Marker>
-        )}
+        )
+      }
       )}
     </>
   )
+}
+
+const PlaceChooserHelpModal: React.FC<{ show: boolean, onClose: () => void }> = ({ show, onClose }) => {
+  const markers = [
+    { label: "Acertou na mosca! Mesma cidade", image: "https://maps.google.com/mapfiles/ms/micons/sunny.png" },
+    { label: "Quando tem um ponto no meio do marcador, é o seu melhor palpite", image: "https://maps.google.com/mapfiles/ms/micons/blue-dot.png" },
+    { label: "Pertinho! Menos de 30km, mas ainda não é a cidade certa!", image: "https://maps.google.com/mapfiles/ms/micons/blue.png" },
+    { label: "Ficando quente! Entre 30km e 100km", image: "https://maps.google.com/mapfiles/ms/micons/green.png" },
+    { label: "Chegando perto! Entre 100km e 300km", image: "https://maps.google.com/mapfiles/ms/micons/yellow.png" },
+    { label: "Um pouco longe ainda! Entre 300km e 1000km", image: "https://maps.google.com/mapfiles/ms/micons/orange.png" },
+    { label: "Muito longe! Mais de 1000km de distância", image: "https://maps.google.com/mapfiles/ms/micons/red.png" },
+  ]
+
+
+  return (
+    <Modal className="place-chooser-tutorial" portalClassName="place-chooser-tutorial-container" show={show} onHide={onClose}>
+      <h3>Como dar um palpite?</h3>
+
+      <ul>
+        <li>Clique em qualquer lugar do mapa</li>
+        <li>Espere carregar as informações</li>
+        <li>Clique em &quot;Confirmar&quot;</li>
+      </ul>
+
+
+      <h3>Legenda dos marcadores</h3>
+
+      {markers.map(marker => (
+        <div key={marker.image}>
+          <img src={marker.image} height={32} width={32} />
+          <h4>{marker.label}</h4>
+        </div>
+      ))}
+    </Modal>
+  );
 }
 
 const PlaceChooser: React.FC<PlaceChooserProps> = ({ level, canGuess, guesses, onConfirm, onNext }) => {
@@ -168,6 +216,7 @@ const PlaceChooser: React.FC<PlaceChooserProps> = ({ level, canGuess, guesses, o
   const [guessCoords, setGuessCoords] = useState<google.maps.LatLngLiteral>();
   const [showInfoWindowId, setShowInfoWindowId] = useState<number>();
   const [guessInfo, setGuessInfo] = useState<GuessEntity>();
+  const [showHelp, setShowHelp] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -201,13 +250,17 @@ const PlaceChooser: React.FC<PlaceChooserProps> = ({ level, canGuess, guesses, o
         <form onSubmit={handleSubmit}>
           <input name="locale" id="locale" />
           <Button>Pesquisar</Button>
+
+          <Button type="button" onClick={() => setShowHelp(true)}>
+            <FontAwesomeIcon icon={faQuestion} />
+          </Button>
         </form>
       </div>
       <div className="place-chooser-map-container">
         <Map
           coordinates={mapCenter}
           zoom={zoom}
-          options={{ clickableIcons: false }}
+          options={{ clickableIcons: false, streetViewControl: false }}
           onMapClick={e => {
             setShowInfoWindowId(-1);
             if (e.latLng && canGuess) {
@@ -248,6 +301,8 @@ const PlaceChooser: React.FC<PlaceChooserProps> = ({ level, canGuess, guesses, o
           )}
         </Map>
       </div>
+
+      <PlaceChooserHelpModal show={showHelp} onClose={() => setShowHelp(false)} />
     </div>
   )
 }

@@ -5,12 +5,13 @@ import Button from "./Button";
 async function loginOrRegister(email: string) {
   const authData = { email: email, password: email };
 
-  const response = await supabase.auth.signIn(authData);
+  let response = await supabase.auth.signIn(authData);
   if (!response.error) {
-    return response;
+    return { response, isNew: false };
   }
 
-  return await supabase.auth.signUp(authData);
+  response = await supabase.auth.signUp(authData);
+  return { response, isNew: true };
 }
 
 const Login: React.FC<LoginProps> = ({ onAuth }) => {
@@ -25,9 +26,9 @@ const Login: React.FC<LoginProps> = ({ onAuth }) => {
       return;
     }
 
-    const { user, session, error } = await loginOrRegister(userName + "@lalalala.com");
+    const { response: { user, session, error }, isNew } = await loginOrRegister(userName + "@lalalala.com");
 
-    onAuth({ user, session, error }, Number(guessLimit));
+    onAuth({ user, session, error }, Number(guessLimit), isNew);
   }
 
   return (

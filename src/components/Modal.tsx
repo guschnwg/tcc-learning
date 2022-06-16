@@ -20,7 +20,7 @@ const Modal: React.FC<Props> = ({ className = "", portalClassName = "", children
           backgroundColor: undefined,
         },
         content: {
-          inset: '150px',
+          inset: '80px',
           border: '1px solid #1d246e',
           background: '#323dbb',
           borderRadius: '12px',

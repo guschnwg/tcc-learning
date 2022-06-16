@@ -52,7 +52,7 @@ const OpenStreetMapsData: React.FC<OpenStreetMapDataProps> = ({ data, className 
           <Flag name={data.address.country} code={((data.address.country_code as string) || '').toUpperCase()} />
         </span>
       )}
-      {distance && (<span>Distância: {distance} km</span>)}
+      {distance && (<span>Distância: {(distance / 1000).toFixed(2)} km</span>)}
       {children}
     </div>
   );
