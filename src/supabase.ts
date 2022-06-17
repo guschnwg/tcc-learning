@@ -10,11 +10,13 @@ export const GAME_LEVEL_HINTS_TABLE = "game_level_hints";
 export const LEVELS_TABLE = "levels";
 export const PROFILES_TABLE = "profiles";
 export const HINTS_TABLE = "hints";
+export const MODES_TABLE = "modes";
+export const MODE_LEVELS_TABLE = "mode_levels";
 
-export async function fetchOrCreate<T>(table: string, match: Record<string, unknown>, insert: Record<string, unknown>): Promise<T | null> {
+export async function fetchOrCreate<T>(table: string, match: Record<string, unknown>, insert: Record<string, unknown>, select = "*"): Promise<T | null> {
   let response = await supabase
     .from(table)
-    .select()
+    .select(select)
     .match(match);
 
   if (response.data && response.data[0]) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import Level from './Level';
-import supabase, { BEST_GUESSES_TABLE, fetchOrCreate, GAMES_TABLE, GAME_LEVELS_TABLE, GAME_LEVEL_HINTS_TABLE, GUESSES_TABLE, HINTS_TABLE, LEVELS_TABLE } from '../supabase';
+import supabase, { BEST_GUESSES_TABLE, fetchOrCreate, GAMES_TABLE, GAME_LEVELS_TABLE, GAME_LEVEL_HINTS_TABLE, GUESSES_TABLE, HINTS_TABLE, LEVELS_TABLE, MODES_TABLE, MODE_LEVELS_TABLE } from '../supabase';
 import Login from './Login';
 import { User } from '@supabase/supabase-js';
 import Path from './Path';
@@ -13,27 +13,15 @@ import Tutorial from './Tutorial';
 
 const Game: React.FC = () => {
   const [auth, setAuth] = useState<AuthData>();
-  const [guessLimit, setGuessLimit] = useState<number>();
-
-  const [levels, setLevels] = useState<LevelsData>();
-
-  const fetchLevels = async () => {
-    const { data, error } = await supabase.from(LEVELS_TABLE).select().order("id");
-    // if (data) fisherYates(data);
-    setLevels({ data, error });
-  }
-
-  useEffect(() => {
-    if (!levels) fetchLevels()
-  }, [levels]);
+  const [gameData, setGameData] = useState<{ guessLimit: number, mode: number }>();
 
   if (!auth) {
     return (
       <div className="login-container">
         <Login
-          onAuth={(auth, guessLimit, isNew) => {
+          onAuth={(auth, guessLimit, mode, isNew) => {
             setAuth({ ...auth, isNew });
-            setGuessLimit(guessLimit);
+            setGameData({ guessLimit, mode });
           }}
         />
 
@@ -44,7 +32,7 @@ const Game: React.FC = () => {
     );
   }
 
-  if (!levels || !levels.data || !auth || !auth.user || !auth.session || !guessLimit) {
+  if (!auth || !auth.user || !auth.session || !gameData) {
     return (
       <div className="login-container">
         <span>
@@ -54,19 +42,22 @@ const Game: React.FC = () => {
     )
   }
 
-  return <InternalGame auth={auth as FulfilledAuthData} guessLimit={guessLimit} levels={levels.data} />
+  return <InternalGame auth={auth as FulfilledAuthData} guessLimit={gameData.guessLimit} mode={gameData.mode} />
 }
 
-const InternalGame: React.FC<GameProps> = ({ auth, guessLimit, levels }) => {
+const InternalGame: React.FC<GameProps> = ({ auth, guessLimit, mode }) => {
   const [game, setGame] = useState<GameEntity>();
   const [currentLevel, setCurrentLevel] = useState(0);
   const [bestGuesses, setBestGuesses] = useState<BestGuess[]>();
 
+  const levels: LevelEntity[] = game?.modes.mode_levels.map(ml => ml.levels) ?? [];
+
   const fetchOrCreateGame = async (user: User, guessLimit: number) => {
     const game = await fetchOrCreate<GameEntity>(
       GAMES_TABLE,
-      { user_id: user.id, guess_limit: guessLimit },
+      { user_id: user.id, guess_limit: guessLimit, mode_id: mode },
       {},
+      `*, ${MODES_TABLE}!inner(*, ${MODE_LEVELS_TABLE}!inner(*, ${LEVELS_TABLE}!inner(*)))`,
     );
     if (game) {
       setGame(game);
@@ -90,7 +81,7 @@ const InternalGame: React.FC<GameProps> = ({ auth, guessLimit, levels }) => {
 
   useEffect(() => {
     if (!game) fetchOrCreateGame(auth.user, guessLimit);
-  }, [game, guessLimit, auth.user])
+  }, [game, guessLimit, auth.user]);
 
   useEffect(() => {
     if (game && levels) fetchBestGuesses(game, levels);

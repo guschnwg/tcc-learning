@@ -47,13 +47,13 @@ declare global {
   }
 
   interface LoginProps {
-    onAuth: (auth: Auth, guessLimit: number, isNew: boolean) => void
+    onAuth: (auth: Auth, guessLimit: number, mode: number, isNew: boolean) => void
   }
 
   interface GameProps {
     auth: FulfilledAuthData
-    levels: LevelEntity[]
     guessLimit: number
+    mode: number
   }
 
   //
@@ -154,6 +154,17 @@ declare global {
     user_id: string
     guess_limit: number
     created_at: string
+    modes: {
+      mode_levels: {
+        levels: LevelEntity
+      }[]
+    }
+  }
+
+  interface ModeEntity {
+    id: number
+    title: string
+    description: string
   }
 
   interface GameLevelEntity {

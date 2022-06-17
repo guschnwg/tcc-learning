@@ -38,6 +38,29 @@ button:active {
   transform: translateY(4px);
 }
 
+select {
+  font-size: 24px;
+  padding: 10px;
+  color: #232b82;
+  border-radius: 5px;
+  border: #232b82 5px solid;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+
+input {
+  font-size: 38px;
+  padding: 10px;
+  color: #232b82;
+  border-radius: 5px;
+  border: #232b82 5px solid;
+  margin: 0;
+  margin-bottom: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
 
 .App {
   text-align: center;
@@ -302,17 +325,6 @@ button:active {
   color: white;
   margin-bottom: 5px;
 }
-.login-container > form > div > input {
-  font-size: 38px;
-  padding: 10px;
-  color: #232b82;
-  border-radius: 5px;
-  border: #232b82 5px solid;
-  margin: 0;
-  margin-bottom: 15px;
-  width: 100%;
-  box-sizing: border-box;
-}
 .login-container > form > div > button {
   margin: 0;
   width: 100%;
@@ -414,14 +426,7 @@ button:active {
   text-align: left;
 }
 .leaderboard form > div > select {
-  font-size: 24px;
-  padding: 10px;
-  color: #232b82;
-  border-radius: 5px;
-  border: #232b82 5px solid;
-  margin: 0;
-  width: 100%;
-  box-sizing: border-box;
+  margin-bottom: 0;
 }
 .leaderboard form > div > button {
   margin-top: 20px;
@@ -511,3 +516,7 @@ tr:nth-child(even) {
 .place-chooser-tutorial > div > h4 {
   margin: 10px 0 10px 10px;
 }
+
+/* .login-container select {
+  margin-bottom: 15px;
+} */
