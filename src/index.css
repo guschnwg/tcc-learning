@@ -411,24 +411,24 @@ input {
   margin-left: 10px;
 }
 
-.leaderboard form {
+.leaderboard > div {
   display: flex;
   padding: 20px;
 }
-.leaderboard form > div {
+.leaderboard > div > div {
   margin-right: 15px;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
-.leaderboard form > div > label {
+.leaderboard > div > div > label {
   color: white;
   text-align: left;
 }
-.leaderboard form > div > select {
+.leaderboard > div > div > select {
   margin-bottom: 0;
 }
-.leaderboard form > div > button {
+.leaderboard > div > div > button {
   margin-top: 20px;
   height: 53.5px;
 }

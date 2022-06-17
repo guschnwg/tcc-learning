@@ -7,8 +7,6 @@ import Leaderboard from './Leaderboard';
 import Debug from './Debug';
 
 
-const COORDINATES = { lat: -20.3864301, lng: -43.5027689 };
-
 const App: React.FC = () => {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '',

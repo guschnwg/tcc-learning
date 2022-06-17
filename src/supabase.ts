@@ -25,7 +25,8 @@ export async function fetchOrCreate<T>(table: string, match: Record<string, unkn
 
   response = await supabase
     .from(table)
-    .insert({...match, ...insert });
+    .insert({...match, ...insert })
+    .select(select);
 
   if (response.data && response.data[0]) {
     return response.data[0];

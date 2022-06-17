@@ -33,6 +33,10 @@ const Login: React.FC<LoginProps> = ({ onAuth }) => {
       return;
     }
 
+    window.localStorage.setItem("user", userName);
+    window.localStorage.setItem("mode", mode.toString());
+    window.localStorage.setItem("guess_limit", guessLimit);
+
     const { response: { user, session, error }, isNew } = await loginOrRegister(userName + "@lalalala.com");
 
     onAuth({ user, session, error }, Number(guessLimit), mode, isNew);

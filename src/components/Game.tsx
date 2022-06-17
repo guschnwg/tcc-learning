@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import Level from './Level';
 import supabase, { BEST_GUESSES_TABLE, fetchOrCreate, GAMES_TABLE, GAME_LEVELS_TABLE, GAME_LEVEL_HINTS_TABLE, GUESSES_TABLE, HINTS_TABLE, LEVELS_TABLE, MODES_TABLE, MODE_LEVELS_TABLE } from '../supabase';
@@ -6,7 +6,6 @@ import Login from './Login';
 import { User } from '@supabase/supabase-js';
 import Path from './Path';
 import Button from './Button';
-import { fisherYates } from '../utils';
 import Settings from './Settings';
 import { Link } from 'react-router-dom';
 import Tutorial from './Tutorial';
@@ -50,9 +49,9 @@ const InternalGame: React.FC<GameProps> = ({ auth, guessLimit, mode }) => {
   const [currentLevel, setCurrentLevel] = useState(0);
   const [bestGuesses, setBestGuesses] = useState<BestGuess[]>();
 
-  const levels: LevelEntity[] = game?.modes.mode_levels.map(ml => ml.levels) ?? [];
+  const levels: LevelEntity[] = useMemo(() => game?.modes.mode_levels.map(ml => ml.levels) ?? [], [game]);
 
-  const fetchOrCreateGame = async (user: User, guessLimit: number) => {
+  const fetchOrCreateGame = async (user: User, mode: number, guessLimit: number) => {
     const game = await fetchOrCreate<GameEntity>(
       GAMES_TABLE,
       { user_id: user.id, guess_limit: guessLimit, mode_id: mode },
@@ -80,8 +79,8 @@ const InternalGame: React.FC<GameProps> = ({ auth, guessLimit, mode }) => {
   }
 
   useEffect(() => {
-    if (!game) fetchOrCreateGame(auth.user, guessLimit);
-  }, [game, guessLimit, auth.user]);
+    if (!game) fetchOrCreateGame(auth.user, mode, guessLimit);
+  }, [game, mode, guessLimit, auth.user]);
 
   useEffect(() => {
     if (game && levels) fetchBestGuesses(game, levels);

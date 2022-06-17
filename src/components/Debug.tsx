@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useEffect } from "react";
 import supabase, { GAME_LEVELS_TABLE, GUESSES_TABLE, LEVELS_TABLE } from "../supabase";
 

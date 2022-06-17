@@ -202,7 +202,7 @@ const PlaceChooserHelpModal: React.FC<{ show: boolean, onClose: () => void }> = 
 
       {markers.map(marker => (
         <div key={marker.image}>
-          <img src={marker.image} height={32} width={32} />
+          <img src={marker.image} height={32} width={32} alt={marker.label} />
           <h4>{marker.label}</h4>
         </div>
       ))}

@@ -167,6 +167,12 @@ declare global {
     description: string
   }
 
+  interface ModeWithLevelsEntity extends ModeEntity {
+    mode_levels: {
+      levels: LevelEntity
+    }[]
+  }
+
   interface GameLevelEntity {
     id: number
     created_at: number
@@ -243,7 +249,6 @@ declare global {
 
   export interface Level {
     id: number
-    city: City
     hints: Hint[]
     markers: LevelMarker[]
     coordinates: Coordinates

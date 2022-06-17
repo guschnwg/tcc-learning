@@ -1,35 +1,36 @@
 import { PostgrestError } from "@supabase/supabase-js";
-import supabase, { BEST_GUESSES_TABLE, GAMES_TABLE, GAME_LEVELS_TABLE, LEVELS_TABLE, PROFILES_TABLE } from "../supabase";
+import supabase, { BEST_GUESSES_TABLE, GAMES_TABLE, GAME_LEVELS_TABLE, LEVELS_TABLE, MODES_TABLE, MODE_LEVELS_TABLE, PROFILES_TABLE } from "../supabase";
 import React, { FormEvent, useEffect, useState } from "react";
 import Button from "./Button";
 import { isSameOSMPlace } from "./OpenStreetMapData";
 
 const Leaderboard: React.FC = () => {
-  const [levels, setLevels] = useState<LevelEntity[]>();
+  const [modes, setModes] = useState<ModeWithLevelsEntity[]>();
 
-  const fetchLevels = async () => {
-    const { data, error } = await supabase.from(LEVELS_TABLE).select().order("id");
+  const fetchModes = async () => {
+    const { data, error } = await supabase.from(MODES_TABLE).select(`*, ${MODE_LEVELS_TABLE}!inner(*, ${LEVELS_TABLE}!inner(*))`);
     if (data) {
-      setLevels(data);
+      setModes(data);
     }
   }
 
   useEffect(() => {
-    if (!levels) fetchLevels()
-  }, [levels]);
+    fetchModes()
+  }, []);
 
-  if (!levels) {
+  if (!modes) {
     return null;
   }
 
-  return <InternalLeaderboard levels={levels} />;
+  return <InternalLeaderboard modes={modes} />;
 }
 
-const fetchLeaderboard = async (guessLimit = 5, levelId = 0): Promise<{ data: LeaderboardData[] | null, error: PostgrestError | null }> => {
+const fetchLeaderboard = async (modeId: number, guessLimit = 5, levelId = 0): Promise<{ data: LeaderboardData[] | null, error: PostgrestError | null }> => {
   let query = supabase
     .from(BEST_GUESSES_TABLE)
     .select(`*, ${GAME_LEVELS_TABLE}!inner(*, ${LEVELS_TABLE}!inner(*), ${GAMES_TABLE}!inner(*, ${PROFILES_TABLE}!inner(*)))`)
-    .eq(`${GAME_LEVELS_TABLE}.${GAMES_TABLE}.guess_limit`, guessLimit);
+    .eq(`${GAME_LEVELS_TABLE}.${GAMES_TABLE}.guess_limit`, guessLimit)
+    .eq(`${GAME_LEVELS_TABLE}.${GAMES_TABLE}.mode_id`, modeId);
 
   if (levelId !== 0) {
     query = query.eq(`${GAME_LEVELS_TABLE}.level_id`, levelId);
@@ -40,14 +41,14 @@ const fetchLeaderboard = async (guessLimit = 5, levelId = 0): Promise<{ data: Le
   return { data, error };
 }
 
-const LevelLeaderboard: React.FC<{ guessLimit: number, levelId: number  }> = ({ guessLimit, levelId }) => {
+const LevelLeaderboard: React.FC<{ mode: number, guessLimit: number, levelId: number  }> = ({ mode, guessLimit, levelId }) => {
   const [data, setData] = useState<LeaderboardData[]>();
   const [, setError] = useState<PostgrestError>();
 
   useEffect(() => {
     setData(undefined);
     setError(undefined);
-    fetchLeaderboard(guessLimit, levelId).then(({ data, error }) => {
+    fetchLeaderboard(mode, guessLimit, levelId).then(({ data, error }) => {
       if (data) {
         setData(data);
       }
@@ -55,7 +56,7 @@ const LevelLeaderboard: React.FC<{ guessLimit: number, levelId: number  }> = ({ 
         setError(error);
       }
     })
-  }, [guessLimit, levelId]);
+  }, [mode, guessLimit, levelId]);
 
   if (!data) {
     return <span>Loading...</span>;
@@ -92,7 +93,7 @@ const LevelLeaderboard: React.FC<{ guessLimit: number, levelId: number  }> = ({ 
   );
 }
 
-const GeneralLeaderboard: React.FC<{ guessLimit: number }> = ({ guessLimit }) => {
+const GeneralLeaderboard: React.FC<{ mode: number, guessLimit: number }> = ({ mode, guessLimit }) => {
   const [data, setData] = useState<GeneralLeaderboardData[]>();
   const [, setError] = useState<PostgrestError>();
 
@@ -100,7 +101,7 @@ const GeneralLeaderboard: React.FC<{ guessLimit: number }> = ({ guessLimit }) =>
     setData(undefined);
     setError(undefined);
 
-    fetchLeaderboard(guessLimit).then(({ data, error }) => {
+    fetchLeaderboard(mode, guessLimit).then(({ data, error }) => {
       if (data) {
         const generalData: GeneralLeaderboardData[] = [];
         for (const guess of data) {
@@ -137,7 +138,7 @@ const GeneralLeaderboard: React.FC<{ guessLimit: number }> = ({ guessLimit }) =>
         setError(error);
       }
     })
-  }, [guessLimit]);
+  }, [mode, guessLimit]);
 
   if (!data) {
     return <span>Loading...</span>;
@@ -179,25 +180,37 @@ const GeneralLeaderboard: React.FC<{ guessLimit: number }> = ({ guessLimit }) =>
   );
 }
 
-const InternalLeaderboard: React.FC<{ levels: LevelEntity[] }> = ({ levels }) => {
+const InternalLeaderboard: React.FC<{ modes: ModeWithLevelsEntity[] }> = ({ modes }) => {
   const [guessLimit, setGuessLimit] = useState<number>(5);
+  const [modeId, setModeId] = useState<number>(modes[0].id);
   const [levelId, setLevelId] = useState<number>(0);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    setGuessLimit(Number((event.target as HTMLFormElement)["guess_limit"].value || "0"));
-    setLevelId(Number((event.target as HTMLFormElement)["level_id"].value || "0"));
-  }
+  const levels = modes.find(mode => mode.id === modeId)?.mode_levels.map(ml => ml.levels) ?? [];
 
   return (
     <div className="leaderboard">
-      <form onSubmit={handleSubmit}>
+      <div>
+        <div>
+          <label htmlFor="mode_id">
+            Modo de Jogo
+          </label>
+          <select
+            name="mode_id"
+            id="mode_id"
+            value={modeId}
+            onChange={e => {
+              setModeId(Number(e.target.value))
+              setLevelId(0);
+            }}
+          >
+            {modes.map(mode => <option key={mode.id} value={mode.id}>{mode.title}</option>)}
+          </select>
+        </div>
         <div>
           <label htmlFor="level_id">
             Nível
           </label>
-          <select name="level_id" id="level_id" defaultValue={0}>
+          <select name="level_id" id="level_id" value={levelId} onChange={e => setLevelId(Number(e.target.value))}>
             <option value={0}>Todos</option>
             {levels.map(level => <option key={level.id} value={level.id}>{level.id}</option>)}
           </select>
@@ -206,7 +219,7 @@ const InternalLeaderboard: React.FC<{ levels: LevelEntity[] }> = ({ levels }) =>
           <label htmlFor="guess_limit">
             Número de palpites
           </label>
-          <select name="guess_limit" id="guess_limit" defaultValue={5}>
+          <select name="guess_limit" id="guess_limit" value={guessLimit} onChange={e => setGuessLimit(Number(e.target.value))}>
             <option value="0">Ilimitado</option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -220,16 +233,12 @@ const InternalLeaderboard: React.FC<{ levels: LevelEntity[] }> = ({ levels }) =>
             <option value="10">10</option>
           </select>
         </div>
-
-        <div>
-          <Button>Confirmar</Button>
-        </div>
-      </form>
+      </div>
 
       {levelId === 0 ? (
-        <GeneralLeaderboard guessLimit={guessLimit} />
+        <GeneralLeaderboard mode={modeId} guessLimit={guessLimit} />
       ) : (
-        <LevelLeaderboard guessLimit={guessLimit} levelId={levelId} />
+        <LevelLeaderboard mode={modeId} guessLimit={guessLimit} levelId={levelId} />
       )}
     </div>
   );
