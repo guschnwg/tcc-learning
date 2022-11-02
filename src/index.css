@@ -38,6 +38,10 @@ code {
   transform: translateY(4px);
 }
 
+.button:disabled {
+  pointer-events: none;
+  opacity: .5;
+}
 select {
   font-size: 24px;
   padding: 10px;
@@ -403,7 +407,7 @@ input {
 }
 
 .hints {
-  padding-inline-start: 20px;
+  padding-inline-start: 45px;
 }
 
 .hints > li {
@@ -559,4 +563,24 @@ tr:nth-child(even) {
 
 .tutorial-modal>.button {
   margin-top: auto;
+}
+details {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
+}
+
+details>* {
+  padding: 10px;
+}
+
+.button.small {
+  padding: 5px;
+  line-height: 12px;
+  font-size: 12px;
+}
+
+.button.small>svg {
+  font-size: 12px;
 }

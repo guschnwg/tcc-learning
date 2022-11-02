@@ -11,7 +11,7 @@ interface ConfigData {
 }
 
 interface ConfigFns {
-  setConfig: (key: keyof ConfigData, value: any) => void
+  setConfig: (key: keyof ConfigData, value: boolean | string) => void
 }
 
 type ContextValue = ConfigData & ConfigFns
@@ -22,15 +22,13 @@ const defaultValue = {
 };
 const ConfigContext = React.createContext<ContextValue>({
   ...defaultValue,
-  setConfig(key, value) {
-    return;
-  },
+  setConfig: () => null,
 });
 
 const ConfigContextProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<ConfigData>(defaultValue);
 
-  const setConfig = (key: keyof ConfigData, value: any) => {
+  const setConfig = (key: keyof ConfigData, value: boolean | string) => {
     window.localStorage.setItem(key, value.toString());
     setData(prev => ({ ...prev, [key]: value }));
   }

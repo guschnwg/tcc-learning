@@ -37,8 +37,10 @@ export function isSameOSMPlace(addressOne: OSMAddress, addressTwo: OSMAddress): 
   return true;
 }
 
+export const cityName = (address: OSMAddress) => findItemInOSMData(address, CITY_KEYS) || findItemInOSMData(address, DISTRICT_KEYS)
+
 const OpenStreetMapsData: React.FC<OpenStreetMapDataProps> = ({ data, className = "", distance, children }) => {
-  const city = findItemInOSMData(data.address, CITY_KEYS);
+  const city = cityName(data.address);
   const state = findItemInOSMData(data.address, STATE_KEYS);
 
   return (

@@ -211,6 +211,7 @@ declare global {
     id: number
     description: string
     level_id: number
+    links: Array<{ url: string, description: string }>
   }
 
   interface GameLevelHintEntity {

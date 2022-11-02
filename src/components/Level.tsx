@@ -59,6 +59,7 @@ const Level: React.FC<LevelProps> = ({ current, hints, guessLimit, startTime, gu
       />
 
       <Hints
+        currentTimeRef={time}
         hints={hints}
         hintsViewed={hintsViewed}
         show={hintsModalOpened}
