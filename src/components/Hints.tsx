@@ -14,6 +14,8 @@ interface HintsProps {
 const Hints: React.FC<HintsProps> = ({ hints, hintsViewed, show, onHide, onHintView }) => {
   return (
     <Modal show={show} onHide={onHide}>
+      <h2>Dicas</h2>
+
       <ul className="hints">
         {hints.map((hint) => {
           const hintView = hintsViewed.find(h => h.hint_id === hint.id);

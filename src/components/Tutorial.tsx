@@ -1,21 +1,32 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestion } from '@fortawesome/free-solid-svg-icons'
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "./Button";
 import Modal from './Modal';
+import { ConfigContext } from './Config';
 
 const TutorialModal: React.FC<{ guessLimit: number, show: boolean, onClose: () => void }> = ({ guessLimit, show, onClose }) => {
+  const { lowSpecs } = useContext(ConfigContext);
+
   return (
-    <Modal show={show} onHide={onClose}>
+    <Modal className='tutorial-modal' show={show} onHide={onClose}>
       <h2>Tutorial</h2>
 
       <h3>Navegação</h3>
 
-      <ul>
-        <li>Clique e arraste no mapa para girar a câmera</li>
-        <li>Clique nos &quot;X&quot; no chão para se mover</li>
-      </ul>
+      {lowSpecs ? (
+        <ul>
+          <li>Use as setas no chão para se mover</li>
+          <li>Clique na bússola no lado direito para girar a visão</li>
+          <li>Clique no botões de + para aproximar e de - para se afastar</li>
+        </ul>
+      ) : (
+          <ul>
+            <li>Clique e arraste no mapa para girar a câmera</li>
+            <li>Clique nos &quot;X&quot; no chão para se mover</li>
+          </ul>
+      )}
 
       <h3>Dicas</h3>
 

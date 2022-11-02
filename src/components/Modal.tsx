@@ -2,19 +2,21 @@ import React from 'react';
 import ReactModal from 'react-modal';
 
 interface Props {
+  container?: HTMLElement | null
   className?: string
   portalClassName?: string
   show: boolean;
   onHide: () => void;
 }
 
-const Modal: React.FC<Props> = ({ className = "", portalClassName = "", children, show, onHide }) => {
+const Modal: React.FC<Props> = ({ container, className = "", portalClassName = "", children, show, onHide }) => {
   return (
     <ReactModal
       isOpen={show}
       onRequestClose={onHide}
       shouldCloseOnEsc
       shouldCloseOnOverlayClick
+      parentSelector={() => container || document.body}
       style={{
         overlay: {
           backgroundColor: undefined,

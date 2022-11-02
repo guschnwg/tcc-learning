@@ -5,6 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import Game from './Game';
 import Leaderboard from './Leaderboard';
 import Debug from './Debug';
+import { ConfigContextProvider } from './Config';
 
 
 const App: React.FC = () => {
@@ -18,15 +19,17 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="App">
-      <div className="full">
-        <Routes>
-          <Route path="/" element={<Game />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/debug" element={<Debug />} />
-        </Routes>
+    <ConfigContextProvider>
+      <div className="App">
+        <div className="full">
+          <Routes>
+            <Route path="/" element={<Game />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/debug" element={<Debug />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </ConfigContextProvider>
   );
 };
 

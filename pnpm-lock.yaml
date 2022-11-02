@@ -1,5 +1,8 @@
 lockfileVersion: 5.4
 
+overrides:
+  react-error-overlay: 6.0.9
+
 specifiers:
   '@fortawesome/fontawesome-svg-core': ^1.2.36
   '@fortawesome/free-solid-svg-icons': ^5.15.4
@@ -19,6 +22,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.4.0
   '@typescript-eslint/parser': ^5.4.0
   country-flag-icons: ^1.4.15
+  csstype: ^3.1.1
   eslint: ^7.11.0
   eslint-config-prettier: ^8.3.0
   eslint-config-react-app: ^6.0.0
@@ -55,6 +59,7 @@ dependencies:
   '@testing-library/react': 11.2.7_sfoxds7t5ydpegc3knd667wn6m
   '@testing-library/user-event': 12.8.3
   country-flag-icons: 1.5.5
+  csstype: 3.1.1
   i18n-iso-countries: 7.5.0
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
@@ -11168,7 +11173,7 @@ packages:
       open: 7.4.2
       pkg-up: 3.1.0
       prompts: 2.4.0
-      react-error-overlay: 6.0.11
+      react-error-overlay: 6.0.9
       recursive-readdir: 2.2.2
       shell-quote: 1.7.2
       strip-ansi: 6.0.0
@@ -11192,8 +11197,8 @@ packages:
       scheduler: 0.20.2
     dev: false
 
-  /react-error-overlay/6.0.11:
-    resolution: {integrity: sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==}
+  /react-error-overlay/6.0.9:
+    resolution: {integrity: sha512-nQTTcUu+ATDbrSD1BZHr5kgSD4oF8OFjxun8uAaL8RwPBacGBNPf/yAuVVdx17N8XNzRDMrZ9XcKZHCjPW+9ew==}
     dev: false
 
   /react-is/16.13.1:

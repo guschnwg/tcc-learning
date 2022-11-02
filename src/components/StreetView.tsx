@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { GoogleMap, InfoWindow, Marker, StreetViewPanorama } from '@react-google-maps/api';
 import OpenStreetMapsData from './OpenStreetMapData';
+import { ConfigContext } from './Config';
 
 interface Props {
   markers?: LevelMarker[]
@@ -51,20 +52,27 @@ const StreetViewMarker: React.FC<StreetViewMarkerProps> = ({ streetViewPanorama,
 const StreetView: React.FC<Props> = ({ markers = [], guesses = [], coordinates = defaultCoordinates }) => {
   const [showMarkers] = useState(false);
   const [streetViewPanorama, setStreetViewPanorama] = useState<google.maps.StreetViewPanorama>();
+  const { lowSpecs } = useContext(ConfigContext);
 
   const streetViewPanoramaOptions: google.maps.StreetViewPanoramaOptions = {
-    clickToGo: true,
     position: coordinates,
     pov: { heading: 0, pitch: 0 },
     zoom: 1,
     visible: true,
     enableCloseButton: false,
-    disableDefaultUI: true,
+    // disableDefaultUI: !lowSpecs,
+    // clickToGo: !lowSpecs,
+    // scrollwheel: !lowSpecs,
+    // panControl: lowSpecs,
+    // motionTracking: !lowSpecs,
+    // motionTrackingControl: !lowSpecs,
+    // disableDoubleClickZoom: lowSpecs,
   };
 
   return (
     <>
       <GoogleMap
+        mapContainerClassName={`street-view-map ${lowSpecs ? "low-specs" : "high-specs"}`}
         mapContainerStyle={{ height: '100%' }}
         center={coordinates}
         zoom={10}

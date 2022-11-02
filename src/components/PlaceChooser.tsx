@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { Circle, InfoWindow, Marker } from '@react-google-maps/api';
 import useSWR from 'swr';
 import Button from './Button';
@@ -175,7 +175,7 @@ const PlaceChooserGuesses: React.FC<{ showInfoWindowId?: number, level: LevelEnt
   )
 }
 
-const PlaceChooserHelpModal: React.FC<{ show: boolean, onClose: () => void }> = ({ show, onClose }) => {
+const PlaceChooserHelpModal: React.FC<{ container: React.RefObject<HTMLDivElement>, show: boolean, onClose: () => void }> = ({ container, show, onClose }) => {
   const markers = [
     { label: "Acertou na mosca! Mesma cidade", image: "https://maps.google.com/mapfiles/ms/micons/sunny.png" },
     { label: "Quando tem um ponto no meio do marcador, é o seu melhor palpite", image: "https://maps.google.com/mapfiles/ms/micons/blue-dot.png" },
@@ -188,12 +188,11 @@ const PlaceChooserHelpModal: React.FC<{ show: boolean, onClose: () => void }> = 
 
 
   return (
-    <Modal className="place-chooser-tutorial" portalClassName="place-chooser-tutorial-container" show={show} onHide={onClose}>
+    <Modal container={container.current} className="place-chooser-tutorial" portalClassName="place-chooser-tutorial-container" show={show} onHide={onClose}>
       <h3>Como dar um palpite?</h3>
 
       <ul>
-        <li>Clique em qualquer lugar do mapa</li>
-        <li>Espere carregar as informações</li>
+        <li>Clique em qualquer lugar do mapa, e espere carregar as informações</li>
         <li>Clique em &quot;Confirmar&quot;</li>
       </ul>
 
@@ -202,10 +201,14 @@ const PlaceChooserHelpModal: React.FC<{ show: boolean, onClose: () => void }> = 
 
       {markers.map(marker => (
         <div key={marker.image}>
-          <img src={marker.image} height={32} width={32} alt={marker.label} />
+          <img src={marker.image} height={24} width={24} alt={marker.label} />
           <h4>{marker.label}</h4>
         </div>
       ))}
+
+      <Button className="full-width" onClick={onClose}>
+        Vamos lá!
+      </Button>
     </Modal>
   );
 }
@@ -217,6 +220,8 @@ const PlaceChooser: React.FC<PlaceChooserProps> = ({ level, canGuess, guesses, o
   const [showInfoWindowId, setShowInfoWindowId] = useState<number>();
   const [guessInfo, setGuessInfo] = useState<GuessEntity>();
   const [showHelp, setShowHelp] = useState(false);
+
+  const container = useRef<HTMLDivElement>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -256,7 +261,7 @@ const PlaceChooser: React.FC<PlaceChooserProps> = ({ level, canGuess, guesses, o
           </Button>
         </form>
       </div>
-      <div className="place-chooser-map-container">
+      <div ref={container} className="place-chooser-map-container">
         <Map
           coordinates={mapCenter}
           zoom={zoom}
@@ -302,7 +307,7 @@ const PlaceChooser: React.FC<PlaceChooserProps> = ({ level, canGuess, guesses, o
         </Map>
       </div>
 
-      <PlaceChooserHelpModal show={showHelp} onClose={() => setShowHelp(false)} />
+      <PlaceChooserHelpModal container={container} show={showHelp} onClose={() => setShowHelp(false)} />
     </div>
   )
 }

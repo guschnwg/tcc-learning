@@ -20,7 +20,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-button {
+.button {
   background: #c5a530;
   border: 2px solid white;
   box-shadow: 0 4px white;
@@ -33,7 +33,7 @@ button {
   margin-bottom: 4px;
   cursor: pointer;
 }
-button:active {
+.button:active {
   box-shadow: 0 0 white !important;
   transform: translateY(4px);
 }
@@ -176,7 +176,7 @@ input {
   align-items: flex-start;
   width: 100%;
 }
-.data-container + button {
+.data-container+.button {
   margin: 0;
   width: 100%;
 }
@@ -248,7 +248,7 @@ input {
   bottom: 0;
   transition: bottom .5s;
 }
-.path-container > button {
+.path-container>.button {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
@@ -258,7 +258,7 @@ input {
   box-shadow: none;
   border-bottom: none;
 }
-.path-container > button:active {
+.path-container>.button:active {
   padding-bottom: 2px;
 }
 .path-container > .path-content {
@@ -327,7 +327,7 @@ input {
   color: white;
   margin-bottom: 5px;
 }
-.login-container > form > div > button {
+.login-container>form>div>.button {
   margin: 0;
   width: 100%;
 }
@@ -372,12 +372,13 @@ input {
   padding-left: 5px;
   padding-right: 5px;
 }
-.search-place-form > form > button {
+.search-place-form>form>.button {
   margin-right: 0;
 }
 
 .place-chooser-map-container {
   flex: 1;
+  position: relative;
 }
 
 @media screen and (max-width: 750px) {
@@ -430,7 +431,7 @@ input {
 .leaderboard > div > div > select {
   margin-bottom: 0;
 }
-.leaderboard > div > div > button {
+.leaderboard>div>div>.button {
   margin-top: 20px;
   height: 53.5px;
 }
@@ -494,7 +495,7 @@ tr:nth-child(even) {
   margin: 0;
 }
 
-.guess-info-modal .data-container .guess-info-modal-actions > button {
+.guess-info-modal .data-container .guess-info-modal-actions>.button {
   margin: 0;
   margin-top: 10px;
 }
@@ -504,26 +505,58 @@ tr:nth-child(even) {
   color: white;
 }
 
-.place-chooser-tutorial {
-  inset: 150px !important;
+.place-chooser-tutorial-container>div {
   position: absolute;
 }
+.place-chooser-tutorial {
+  inset: 40px !important;
+  position: absolute;
+  display: flex;
+    flex-direction: column;
+}
 
+.place-chooser-tutorial>button {
+  margin-top: auto;
+}
 .place-chooser-tutorial > div {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
+.place-chooser-tutorial>ul {
+  margin: 0;
+}
 
 .place-chooser-tutorial > div > h4 {
-  margin: 10px 0 10px 10px;
+  margin: 5px 0 5px 5px;
 }
 
 /* .login-container select {
   margin-bottom: 15px;
 } */
-.settings-title {
+.Config-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.street-view-map.low-specs [aria-label="Street View"] {
+  pointer-events: none;
+}
+
+.gm-iv-address {
+  display: none;
+}
+
+.tutorial-modal {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+}
+
+.tutorial-modal>ul {
+  margin: 0;
+}
+
+.tutorial-modal>.button {
+  margin-top: auto;
 }

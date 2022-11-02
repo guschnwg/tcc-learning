@@ -6,7 +6,7 @@ import Login from './Login';
 import { User } from '@supabase/supabase-js';
 import Path from './Path';
 import Button from './Button';
-import Settings from './Settings';
+import Config from './Config';
 import { Link } from 'react-router-dom';
 import Tutorial from './Tutorial';
 
@@ -108,7 +108,7 @@ const InternalGame: React.FC<GameProps> = ({ auth, guessLimit, mode }) => {
 
       <div className="game-footer">
         <div>
-          <Settings />
+          <Config />
 
           <Tutorial guessLimit={game.guess_limit} show={auth.isNew} />
         </div>
