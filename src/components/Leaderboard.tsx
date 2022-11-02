@@ -7,7 +7,7 @@ const Leaderboard: React.FC = () => {
   const [modes, setModes] = useState<ModeWithLevelsEntity[]>();
 
   const fetchModes = async () => {
-    const { data } = await supabase.from(MODES_TABLE).select(`*, ${MODE_LEVELS_TABLE}!inner(*, ${LEVELS_TABLE}!inner(*))`);
+    const { data } = await supabase.from(MODES_TABLE).select(`*, ${MODE_LEVELS_TABLE}!inner(*, ${LEVELS_TABLE}!inner(*))`).eq("active", true);
     if (data) {
       setModes(data);
     }

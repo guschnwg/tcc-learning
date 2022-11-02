@@ -19,7 +19,7 @@ const Login: React.FC<LoginProps> = ({ onAuth }) => {
   const [modes, setModes] = useState<ModeEntity[]>();
 
   useEffect(() => {
-    supabase.from(MODES_TABLE).select().then(({ data }) => setModes(data ?? undefined))
+    supabase.from(MODES_TABLE).select().eq('active', true).then(({ data }) => setModes(data ?? undefined))
   }, []);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
