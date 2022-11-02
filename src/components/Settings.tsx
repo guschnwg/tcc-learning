@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCog } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import React, { useState } from "react";
 import Button from "./Button";
@@ -8,18 +8,40 @@ import Modal from './Modal';
 const SettingsModal: React.FC<{ show: boolean, onClose: () => void }> = ({ show, onClose }) => {
   return (
     <Modal show={show} onHide={onClose}>
-      <h3>Configurações</h3>
+      <div className="settings-title">
+        <h3>Configurações</h3>
 
-      <div>
+        <Button className='small' onClick={onClose}>
+          <FontAwesomeIcon icon={faTimes} />
+        </Button>
+      </div>
+
+      <div className="settings-config">
         <label htmlFor="mute">Desativar sons</label>
 
-        <input
-          type="checkbox"
+        <select
           id="mute"
           name="mute"
-          onChange={event => window.localStorage.setItem("mute", event.target.checked ? "true" : "false")}
-          checked={window.localStorage.getItem("mute") === "true"}
-        />
+          onChange={event => window.localStorage.setItem("mute", event.target.value)}
+          defaultValue={window.localStorage.getItem("mute") || "false"}
+        >
+          <option value="true">Sim</option>
+          <option value="false">Não</option>
+        </select>
+      </div>
+
+      <div className="settings-config">
+        <label htmlFor="low-specs">Jogo mais leve?</label>
+
+        <select
+          id="low-specs"
+          name="low-specs"
+          onChange={event => window.localStorage.setItem("low-specs", event.target.value)}
+          defaultValue={window.localStorage.getItem("low-specs") || "false"}
+        >
+          <option value="true">Sim</option>
+          <option value="false">Não</option>
+        </select>
       </div>
     </Modal>
   )

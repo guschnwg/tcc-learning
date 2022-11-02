@@ -4,6 +4,7 @@ import Stopwatch from './Stopwatch';
 import StreetView from './StreetView';
 import { PlaceChooserModal } from './PlaceChooser';
 import Hints from './Hints';
+import Carousel from './Carousel';
 
 const Level: React.FC<LevelProps> = ({ current, hints, guessLimit, startTime, guesses, hintsViewed, onGuess, onHintViewed, onTimePassed, onNext }) => {
   const [mapModalOpened, setMapModalOpened] = useState(false);
@@ -38,6 +39,10 @@ const Level: React.FC<LevelProps> = ({ current, hints, guessLimit, startTime, gu
       <div className="game-body full-height">
         <StreetView
           markers={[]}
+          guesses={guesses}
+          coordinates={current}
+        />
+        <Carousel
           guesses={guesses}
           coordinates={current}
         />

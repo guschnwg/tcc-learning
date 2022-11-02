@@ -10,7 +10,7 @@ import Debug from './Debug';
 const App: React.FC = () => {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '',
-    libraries: ["geometry"],
+    libraries: ["geometry", "places"],
   });
 
   if (!isLoaded || loadError) {

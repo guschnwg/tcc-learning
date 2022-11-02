@@ -25,7 +25,7 @@ const Game: React.FC = () => {
         />
 
         <Link to="/leaderboard" className="leaderboard-link">
-          leaderboard
+          Ranking dos melhores
         </Link>
       </div>
     );
@@ -64,7 +64,7 @@ const InternalGame: React.FC<GameProps> = ({ auth, guessLimit, mode }) => {
   }
 
   const fetchBestGuesses = async (game: GameEntity, levels: LevelEntity[]) => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from(BEST_GUESSES_TABLE)
       .select(`*, ${GAME_LEVELS_TABLE}!inner(*, ${LEVELS_TABLE}!inner(*))`)
       .order("distance")
@@ -149,7 +149,7 @@ const VeryInternalGame: React.FC<{ auth: FulfilledAuthData, level: LevelEntity, 
   }
 
   const fetchGuesses = async (gameLevel: GameLevelEntity) => {
-    const { data, error } = await supabase.from(GUESSES_TABLE).select().match({ game_level_id: gameLevel.id });
+    const { data } = await supabase.from(GUESSES_TABLE).select().match({ game_level_id: gameLevel.id });
 
     if (data) {
       setGuesses(data);
@@ -157,7 +157,7 @@ const VeryInternalGame: React.FC<{ auth: FulfilledAuthData, level: LevelEntity, 
   }
 
   const fetchHintsViewed = async (gameLevel: GameLevelEntity) => {
-    const { data, error } = await supabase.from(GAME_LEVEL_HINTS_TABLE).select().match({ game_level_id: gameLevel.id });
+    const { data } = await supabase.from(GAME_LEVEL_HINTS_TABLE).select().match({ game_level_id: gameLevel.id });
 
     if (data) {
       setHintsViewed(data);
@@ -165,7 +165,7 @@ const VeryInternalGame: React.FC<{ auth: FulfilledAuthData, level: LevelEntity, 
   }
 
   const fetchHints = async (level: LevelEntity) => {
-    const { data, error } = await supabase.from(HINTS_TABLE).select().match({ level_id: level.id });
+    const { data } = await supabase.from(HINTS_TABLE).select().match({ level_id: level.id });
 
     if (data) {
       setHints(data);
@@ -199,7 +199,7 @@ const VeryInternalGame: React.FC<{ auth: FulfilledAuthData, level: LevelEntity, 
   }
 
   const handleHintView = async (hint: HintEntity, time: number) => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from(GAME_LEVEL_HINTS_TABLE)
       .insert({ game_level_id: gameLevel.id, hint_id: hint.id, time_elapsed: time });
 
@@ -211,7 +211,7 @@ const VeryInternalGame: React.FC<{ auth: FulfilledAuthData, level: LevelEntity, 
   }
 
   const handleGuess = async (marker: google.maps.LatLngLiteral, osmData: OSMData, time: number, distance: number) => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from(GUESSES_TABLE)
       .insert({
         game_level_id: gameLevel.id,

@@ -1,14 +1,13 @@
 import { PostgrestError } from "@supabase/supabase-js";
 import supabase, { BEST_GUESSES_TABLE, GAMES_TABLE, GAME_LEVELS_TABLE, LEVELS_TABLE, MODES_TABLE, MODE_LEVELS_TABLE, PROFILES_TABLE } from "../supabase";
-import React, { FormEvent, useEffect, useState } from "react";
-import Button from "./Button";
+import React, { useEffect, useState } from "react";
 import { isSameOSMPlace } from "./OpenStreetMapData";
 
 const Leaderboard: React.FC = () => {
   const [modes, setModes] = useState<ModeWithLevelsEntity[]>();
 
   const fetchModes = async () => {
-    const { data, error } = await supabase.from(MODES_TABLE).select(`*, ${MODE_LEVELS_TABLE}!inner(*, ${LEVELS_TABLE}!inner(*))`);
+    const { data } = await supabase.from(MODES_TABLE).select(`*, ${MODE_LEVELS_TABLE}!inner(*, ${LEVELS_TABLE}!inner(*))`);
     if (data) {
       setModes(data);
     }

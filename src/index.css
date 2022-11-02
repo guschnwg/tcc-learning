@@ -105,7 +105,9 @@ input {
   border-radius: 12px;
 }
 
-.game-body > * {
+.game-body>*,
+.game-body .mapsConsumerUiSceneInternalCoreScene__root,
+.game-body [aria-label="Street View"] {
   border-radius: 8px;
 }
 
@@ -520,3 +522,8 @@ tr:nth-child(even) {
 /* .login-container select {
   margin-bottom: 15px;
 } */
+.settings-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

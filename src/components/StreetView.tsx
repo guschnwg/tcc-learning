@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { GoogleMap, InfoWindow, Marker } from '@react-google-maps/api';
-import { StreetViewPanorama } from '@react-google-maps/api';
+import { GoogleMap, InfoWindow, Marker, StreetViewPanorama } from '@react-google-maps/api';
 import OpenStreetMapsData from './OpenStreetMapData';
 
 interface Props {
